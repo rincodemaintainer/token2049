@@ -1,0 +1,139 @@
+{
+  "illustrative_only": true,
+  "schema_version": "0.1",
+  "job_id": "demo-job-001",
+  "plan_version": 1,
+  "approved_plan_hash": null,
+  "execution_bundle_hash": null,
+  "application_state": "report_ready",
+  "payment_state": "ResultSubmitted",
+  "payment_state_example_only": true,
+  "delivery_complete": true,
+  "summary": "Finite approval and one swap succeeded. Approval cancellation recovered correctly. The confirmed swap did not produce the required success notification.",
+  "cases": [
+    {
+      "case_id": "SWAP-01",
+      "outcome": "PASS",
+      "attempts": 1,
+      "expected": "Approval and swap receipts succeed; B output at least 950000 units",
+      "observed": "B output 970000 units; receipts successful",
+      "cause_category": null,
+      "attribution_status": "not_applicable",
+      "event_ids": [
+        "EV-010",
+        "EV-017",
+        "EV-020",
+        "EV-021"
+      ],
+      "evidence_refs": [
+        "main-video",
+        "main-trace",
+        "approval-receipt",
+        "swap-receipt",
+        "chain-snapshot"
+      ]
+    },
+    {
+      "case_id": "NOTIFY-01",
+      "outcome": "FAIL",
+      "attempts": 1,
+      "expected": "Success notification within 10 seconds after receipt confirmation",
+      "observed": "No success notification at timeout; swap confirmed",
+      "cause_category": "app_behavior",
+      "attribution_status": "supported_by_observation_human_review_available",
+      "event_ids": [
+        "EV-020",
+        "EV-022",
+        "EV-023"
+      ],
+      "evidence_refs": [
+        "main-video",
+        "main-trace",
+        "notification-shot",
+        "swap-receipt"
+      ]
+    },
+    {
+      "case_id": "CANCEL-01",
+      "outcome": "PASS",
+      "attempts": 1,
+      "expected": "Rejection sends no approval transaction and clears loading",
+      "observed": "No transaction; allowance unchanged; loading cleared",
+      "cause_category": null,
+      "attribution_status": "not_applicable",
+      "event_ids": [
+        "EV-025",
+        "EV-027",
+        "EV-028",
+        "EV-029"
+      ],
+      "evidence_refs": [
+        "cancel-video",
+        "cancel-trace",
+        "chain-snapshot"
+      ]
+    }
+  ],
+  "usage": {
+    "attempt_limit_total_per_case": 3,
+    "clarification_rounds_used": 1,
+    "service_fixed_fee_units": "15000000",
+    "asset": "tADA",
+    "test_funds_accounted_separately": true
+  },
+  "review": {
+    "human_reviewer_id": null,
+    "refund_request_deadline": null,
+    "require_live_protocol_deadline": true,
+    "decision": null,
+    "note": "App defects do not alone imply failed QA delivery."
+  },
+  "artifacts": [
+    {
+      "id": "main-video",
+      "path": "recordings/main.webm",
+      "sha256": null
+    },
+    {
+      "id": "main-trace",
+      "path": "traces/main.zip",
+      "sha256": null
+    },
+    {
+      "id": "notification-shot",
+      "path": "screenshots/notification-missing.png",
+      "sha256": null
+    },
+    {
+      "id": "approval-receipt",
+      "path": "chain/approval.json",
+      "sha256": null
+    },
+    {
+      "id": "swap-receipt",
+      "path": "chain/swap.json",
+      "sha256": null
+    },
+    {
+      "id": "chain-snapshot",
+      "path": "chain/balances-and-allowances.json",
+      "sha256": null
+    },
+    {
+      "id": "cancel-video",
+      "path": "recordings/cancel.webm",
+      "sha256": null
+    },
+    {
+      "id": "cancel-trace",
+      "path": "traces/cancel.zip",
+      "sha256": null
+    },
+    {
+      "id": "session-log",
+      "path": "session-events.jsonl",
+      "sha256": null
+    }
+  ],
+  "note": "No artifacts or real transactions accompany this synthetic example. Final evidence digests and protocol references are populated only for an actual session."
+}

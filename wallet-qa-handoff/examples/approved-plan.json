@@ -1,0 +1,193 @@
+{
+  "illustrative_only": true,
+  "schema_version": "0.1",
+  "job_id": "demo-job-001",
+  "plan_version": 1,
+  "target": {
+    "url": "https://swap.example.invalid",
+    "build_id": "demo-build-001",
+    "chain": "Base Sepolia",
+    "chain_id": 84532,
+    "wallet": "MetaMask",
+    "wallet_address": null,
+    "router_address": null,
+    "tokens": {
+      "A": {
+        "address": null,
+        "decimals": 6
+      },
+      "B": {
+        "address": null,
+        "decimals": 6
+      }
+    }
+  },
+  "requirements": [
+    {
+      "id": "REQ-SWAP",
+      "text": "One finite approval and swap succeeds with at least the agreed minimum output."
+    },
+    {
+      "id": "REQ-NOTIFY",
+      "text": "Success notification appears within 10 seconds of confirmed swap receipt."
+    },
+    {
+      "id": "REQ-CANCEL",
+      "text": "Rejecting approval recovers the UI without a submitted approval transaction."
+    }
+  ],
+  "budgets": {
+    "service": {
+      "network": "Cardano preprod",
+      "asset": "tADA",
+      "decimals": 6,
+      "base_fee_units": "12000000",
+      "contingency_percent": 25,
+      "contingency_units": "3000000",
+      "fixed_total_units": "15000000",
+      "illustrative_price": true
+    },
+    "testing": {
+      "swap_input_A_units": "1000000",
+      "minimum_output_B_units": "950000",
+      "max_native_gas_units": "1000000000000000",
+      "max_successful_swaps": 1,
+      "allowance_type": "finite",
+      "return_address": null
+    }
+  },
+  "limits": {
+    "max_attempts_total_per_case": 3,
+    "included_clarification_rounds": 2,
+    "case_timeout_seconds": 180,
+    "browser_active_seconds": 600,
+    "model_token_limit": 20000,
+    "paused_input_timeout_seconds": 300
+  },
+  "deadlines": {
+    "pay_by": null,
+    "submit_result_by": null,
+    "refund_request_before_unlock_time": null,
+    "external_dispute_after_refund_time": null,
+    "require_live_masumi_timestamps": true
+  },
+  "approval": {
+    "requester_id": "demo-buyer",
+    "approved_at": "2026-10-06T10:00:30Z",
+    "approved_plan_hash": null
+  },
+  "cases": [
+    {
+      "id": "SWAP-01",
+      "requirement_id": "REQ-SWAP",
+      "priority": "critical",
+      "fixture": "funded-wallet-zero-allowance",
+      "depends_on": [],
+      "preconditions": [
+        "Approved network and router",
+        "Gas and token A available",
+        "Funded pool",
+        "Zero router allowance"
+      ],
+      "steps": [
+        {
+          "id": "CONNECT",
+          "action": "Connect test wallet",
+          "expected": "Approved account and network shown"
+        },
+        {
+          "id": "QUOTE",
+          "action": "Enter 1 test token A",
+          "expected": "Quote with minimum output at least 0.95 test token B"
+        },
+        {
+          "id": "APPROVE",
+          "action": "Approve 1 test token A for approved router",
+          "expected": "Successful receipt and finite allowance"
+        },
+        {
+          "id": "SWAP",
+          "action": "Submit exactly one approved swap",
+          "expected": "Successful receipt; output B at least minimum"
+        }
+      ],
+      "evidence": [
+        "browser-and-wallet-recording",
+        "trace",
+        "approval-receipt",
+        "swap-receipt",
+        "allowance",
+        "balance-deltas"
+      ]
+    },
+    {
+      "id": "NOTIFY-01",
+      "requirement_id": "REQ-NOTIFY",
+      "priority": "high",
+      "fixture": "main-swap-session",
+      "depends_on": [
+        "SWAP-01"
+      ],
+      "preconditions": [
+        "Confirmed successful swap receipt"
+      ],
+      "steps": [
+        {
+          "id": "NOTIFY",
+          "action": "Observe UI for 10 seconds after receipt confirmation",
+          "expected": "Success notification visible"
+        }
+      ],
+      "evidence": [
+        "browser-and-wallet-recording",
+        "trace",
+        "notification-screenshot"
+      ]
+    },
+    {
+      "id": "CANCEL-01",
+      "requirement_id": "REQ-CANCEL",
+      "priority": "normal",
+      "fixture": "separate-wallet-zero-allowance",
+      "depends_on": [],
+      "preconditions": [
+        "Separate fixture with zero router allowance"
+      ],
+      "steps": [
+        {
+          "id": "REJECT",
+          "action": "Reject approval in wallet",
+          "expected": "No approval submitted; allowance unchanged; app loading state clears"
+        }
+      ],
+      "evidence": [
+        "cancel-recording",
+        "cancel-trace",
+        "allowance"
+      ]
+    }
+  ],
+  "evidence_policy": {
+    "record_all_attempts": true,
+    "structured_event_log": true,
+    "include_wallet_windows": true,
+    "omit_credentials_and_wallet_secrets": true,
+    "seal_before_result_submission": true
+  },
+  "refund_policy": {
+    "decision_maker": "human_operator",
+    "mvp_remedies": [
+      "full_job_refund",
+      "replacement_run"
+    ],
+    "partial_escrow_refund_supported": null
+  },
+  "excluded_scope": [
+    "mainnet",
+    "other-wallets",
+    "mobile-wallets",
+    "whole-site-coverage",
+    "external-agent-client",
+    "telegram"
+  ]
+}

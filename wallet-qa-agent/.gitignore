@@ -1,0 +1,14 @@
+node_modules
+.env*
+.local/
+.eve
+.vercel
+.next
+.output
+.nitro
+dist
+.DS_Store
+*.tsbuildinfo
+.cache-synpress/
+playwright-report/
+test-results/

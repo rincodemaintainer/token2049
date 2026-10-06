@@ -1,0 +1,33 @@
+{
+  "name": "wallet-qa-agent",
+  "version": "0.0.0",
+  "type": "module",
+  "imports": {
+    "#*": "./agent/*",
+    "#evals/*": "./evals/*"
+  },
+  "scripts": {
+    "build": "eve build",
+    "deploy": "eve deploy",
+    "dev": "eve dev",
+    "eval": "eve eval",
+    "start": "eve start",
+    "typecheck": "tsc"
+  },
+  "dependencies": {
+    "@vercel/connect": "2.2.0",
+    "ai": "^7.0.105",
+    "eve": "^0.71.2",
+    "viem": "^2.57.3",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.48.2",
+    "@synthetixio/synpress": "4.1.2",
+    "@types/node": "24.x",
+    "typescript": "7.0.2"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}

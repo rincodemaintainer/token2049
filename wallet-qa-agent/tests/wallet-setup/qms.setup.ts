@@ -2,19 +2,11 @@ import { defineWalletSetup } from "@synthetixio/synpress";
 import { getExtensionId } from "@synthetixio/synpress/playwright";
 import { expect } from "@playwright/test";
 import { mkdirSync, writeFileSync } from "node:fs";
-import { mnemonicToAccount } from "viem/accounts";
-import { importRecoveryPhrase, usePopupMode, verifyWalletAddress } from "../helpers/metamask-ui";
+import { testWallet } from "../helpers/wallet-bootstrap";
+import { importRecoveryPhrase, usePopupMode } from "../helpers/metamask-setup";
+import { verifyWalletAddress } from "../helpers/metamask-ui";
 
-process.loadEnvFile(".env");
-const password = process.env.QMS_TEST_WALLET_PASSWORD;
-const mnemonic = process.env.QMS_TEST_WALLET_MNEMONIC;
-const expectedAddress = process.env.QMS_TEST_WALLET_ADDRESS;
-if (!password || !mnemonic || !expectedAddress) {
-  throw new Error("Saved QMS test wallet configuration is incomplete");
-}
-if (mnemonicToAccount(mnemonic).address.toLowerCase() !== expectedAddress.toLowerCase()) {
-  throw new Error("Saved recovery phrase does not match the test wallet address");
-}
+const { password, mnemonic, expectedAddress } = testWallet;
 
 export default defineWalletSetup(password, async (context, walletPage) => {
   context.setDefaultTimeout(20_000);

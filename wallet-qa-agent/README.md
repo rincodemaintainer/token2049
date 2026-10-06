@@ -37,6 +37,15 @@ Two runner issues were isolated. Synpress's callback-extraction regex hung on de
 
 Do not treat RPC swaps, CLI transfers, or plan/report fixtures as browser QA success. The earlier Qwap swap used direct RPC calls, not browser automation. No browser swap has been verified.
 
+## Browser modules
+
+- `tests/helpers/wallet-bootstrap.ts`: load and validate local credentials.
+- `tests/helpers/metamask-setup.ts`: import MetaMask and configure popup mode. `tests/wallet-setup/qms.setup.ts` orchestrates setup and readiness evidence.
+- `tests/helpers/wallet-connection.ts`: connection popup and expected network approval. App controls and assertions stay in the journey spec.
+- `tests/helpers/wallet-interaction.ts`: opt-in token approval and message signing, with supplied request policy checks and exact finite allowance.
+
+Interaction helpers are unit-tested adapters, not live-verified MetaMask 13.13.1 flows. The caller must inspect the pending request (including message content and gas settings), supply matching policy fields, track transaction usage, and verify receipts/evidence. These helpers do not extract request fields or enforce gas settings themselves. Connection-only tests do not call them.
+
 ## Test wallet migration — 2026-10-07
 
 Generated a fresh 24-word recovery phrase with viem and saved it locally in `.env` and `.env.local` (mode 0600, ignored by Git). Active test wallet: `0x6Ba7c2Cb493834d922028EE7B2c33aB99b0c6210`. Previous credentials are retained under `QMS_PREVIOUS_TEST_WALLET_*`.

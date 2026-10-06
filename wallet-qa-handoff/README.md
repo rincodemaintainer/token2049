@@ -1,5 +1,7 @@
 # Wallet QA agent developer handoff
 
+[15-slide pitch deck](pitch-deck.html) — each slide opens as its own page, with Previous/Next links. Print each page to PDF in landscape with background graphics enabled, then combine them. The deck distinguishes planned work from verified prototype work.
+
 Prepared on 6 October 2026, Asia Singapore. This is a product and engineering brief for a developer team taking over the selected TOKEN2049 Origins idea. It contains planning documents and illustrative records, with no application implementation or completed test runs.
 
 Build a paid Web3 QA agent that agrees on expected behavior with a buyer, uses a real isolated browser wallet, executes an approved test plan, and delivers recordings plus a structured account of the session. Cardano and Masumi handle service payment; the tested app can use a different chain.

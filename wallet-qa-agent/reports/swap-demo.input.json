@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "title": "Qwap swap evidence",
+  "report": ".local/swap-test-results/report.json",
+  "runDirectory": ".local/swap-test-results/qwap-wallet-Funded-wallet-connection-and-displayed-balance-swap",
+  "recovery": ".local/swap-test-results/qwap-wallet-Funded-wallet-connection-and-displayed-balance-swap/swap-recovery.json",
+  "rpcProof": ".local/swap-test-results/qwap-wallet-Funded-wallet-connection-and-displayed-balance-swap/rpc-proof.json",
+  "followup": null,
+  "evalSummary": null,
+  "runnerLog": ".local/swap-run.log",
+  "recordings": [
+    {
+      "path": ".local/safe-recordings/qwap-app.webm",
+      "label": "Qwap application recording",
+      "scope": "Qwap app page from connection through swap success; wallet popups are documented by screenshots, not this clip."
+    }
+  ],
+  "trace": null
+}

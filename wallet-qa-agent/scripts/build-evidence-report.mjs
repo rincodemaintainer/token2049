@@ -123,6 +123,7 @@ const trace = traceBytes ? await save('traces/playwright-trace.zip', traceBytes,
 for (const name of ['README.md', 'package.json', 'playwright.config.ts', 'playwright.swap.config.ts', 'tests/qwap-wallet.spec.ts', 'tests/helpers/qms-swap.ts', 'scripts/build-evidence-report.mjs', 'scripts/build-evidence-report.test.mjs', 'scripts/capture-rpc-proof.mjs', 'reports/INPUT-CONTRACT.md', 'reports/swap-demo.input.json', 'reports/evidence-template.html']) {
   await save(`source/${name}`, await readFile(source(name)), name, 'Source', name);
 }
+await save('assets/wallet-qa-logo.png', await readFile(source('assets/wallet-qa-logo-v4.png')), 'Wallet QA logo', 'Brand', 'assets/wallet-qa-logo-v4.png');
 const manifest = { schemaVersion: 1, generatedAt: new Date().toISOString(), retention: { mode: 'local', plannedHostedDays: 7, publishedAt: null, expiresAt: null }, files };
 const exportHead = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
 const browserPassed = result.status === 'passed';

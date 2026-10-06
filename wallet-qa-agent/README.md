@@ -2,6 +2,18 @@
 
 An [eve](https://eve.dev) agent for Web3 teams to plan wallet tests and report supplied evidence. Browser wallet execution, signing controls, and recording are not connected yet; it cannot complete the Qwap UI swap test.
 
+## Browser automation status — reset on 2026-10-07
+
+The required outcome is an automated browser test: open Qwap, connect the intended wallet, approve the swap through the wallet UI, and verify the app's result with browser evidence. This has not been completed.
+
+- The earlier swap was submitted directly to the router through RPC. Using it as a substitute for the requested browser test was wrong. It provides no evidence that wallet connection, browser signing, or Qwap's success notification worked.
+- The public swap form preflight only checked page controls. It did not connect a wallet or execute a browser swap.
+- The opened MetaMask profile used the public example account `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`. The intended funded test wallet is `0x5a6208aD268C30D9641EDce35F420B61bEAF6819`; its saved private key was checked against that address without printing it. Its import, selection, and balance were not verified in the browser.
+- Direct Playwright attempts reached onboarding and stalled after “Open wallet.” A subsequent Synpress cache build timed out before account import. Interactive inspection reported “Background connection unresponsive”; restarting MetaMask did not produce a verified wallet session.
+- At the user's request, the browser setup was removed: Playwright/Synpress dependencies, test configuration and fixtures, browser profiles, downloaded extensions, helper scripts, caches, reports, screenshots, and recordings. Wallet credentials and historical transaction/payment records were preserved.
+
+A future browser runner must verify the selected and connected wallet address before any transaction. If browser automation fails, report that failure; do not fall back to direct RPC transactions or claim a successful browser test.
+
 ## Local setup
 
 Use Node.js 24 (the Codex bundled runtime is available at `/Users/rinnguyen/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin`). Install the locked dependencies, then start eve:

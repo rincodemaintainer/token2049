@@ -9,6 +9,3 @@ node_modules
 dist
 .DS_Store
 *.tsbuildinfo
-.cache-synpress/
-playwright-report/
-test-results/

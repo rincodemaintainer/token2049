@@ -1,42 +1,72 @@
 # Wallet QA agent
 
-An [eve](https://eve.dev) agent for Web3 teams to plan wallet tests and report supplied evidence. Browser wallet execution, signing controls, and recording are not connected yet; it cannot complete the Qwap UI swap test.
+An [eve](https://eve.dev) agent that turns a Web3 team's short QA request into confirmed requirements, a versioned test plan, bounded wallet policy, structured session evidence, and a sealed report. Cardano/Masumi handles service payment; the tested app can be another chain. **Token swap testing is one journey template**, not the product itself.
 
-## Browser automation status — reset on 2026-10-07
+## What works now
 
-The required outcome is an automated browser test: open Qwap, connect the intended wallet, approve the swap through the wallet UI, and verify the app's result with browser evidence. This has not been completed.
+Deterministic core under `agent/lib/` implements the [handoff](../wallet-qa-handoff/) rules:
 
-- The earlier swap was submitted directly to the router through RPC. Using it as a substitute for the requested browser test was wrong. It provides no evidence that wallet connection, browser signing, or Qwap's success notification worked.
-- The public swap form preflight only checked page controls. It did not connect a wallet or execute a browser swap.
-- The opened MetaMask profile used the public example account `0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`. The intended funded test wallet is `0x5a6208aD268C30D9641EDce35F420B61bEAF6819`; its saved private key was checked against that address without printing it. Its import, selection, and balance were not verified in the browser.
-- Direct Playwright attempts reached onboarding and stalled after “Open wallet.” A subsequent Synpress cache build timed out before account import. Interactive inspection reported “Background connection unresponsive”; restarting MetaMask did not produce a verified wallet session.
-- At the user's request, the browser setup was removed: Playwright/Synpress dependencies, test configuration and fixtures, browser profiles, downloaded extensions, helper scripts, caches, reports, screenshots, and recordings. Wallet credentials and historical transaction/payment records were preserved.
-
-A future browser runner must verify the selected and connected wallet address before any transaction. If browser automation fails, report that failure; do not fall back to direct RPC transactions or claim a successful browser test.
-
-## Local setup
-
-Use Node.js 24 (the Codex bundled runtime is available at `/Users/rinnguyen/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin`). Install the locked dependencies, then start eve:
+| Area | Behavior |
+| --- | --- |
+| Interview | Essential questions only (`list_essential_questions`) |
+| Plan + quote | Versioned plan, ~25% contingency fixed fee (`build_test_plan`) |
+| Signing policy | Chain/domain/spender/amount/tx caps (`check_signing_policy`) |
+| Outcomes | PASS requires evidence; FLAKY/FAIL/BLOCKED/INCONCLUSIVE/RUNNER_ERROR/NOT_RUN (`classify_case_outcome`) |
+| Recovery | Three-attempt default; no resubmit while tx status unknown |
+| Report | Delivery completeness separate from app defects (`build_result_report`) |
+| Swap demo fixture | Injected observations reproduce the missing-notification scenario |
 
 ```sh
 npm ci
+npm test
+npm run typecheck
 npm run dev
 ```
 
-In eve's terminal UI, use `/login` to connect a model. The current `agent/agent.ts` uses a ChatGPT subscription for local development; it cannot serve a hosted deployment. Send a small request such as:
+## Browser automation status — reset on 2026-10-07
 
-> Plan a Base Sepolia Token A to Token B swap check. Verify the success notification. What information is missing?
+Eve's `run_browser_check` tool runs Playwright against Qwap. Playwright 1.63.0 and Synpress 4.1.2 are installed; wallet setup uses MetaMask 13.13.1. Interactive Playwright debugging verified the full wallet address, password unlock, a real connection popup, QMS Testnet approval, and displayed balances: MetaMask 8.147 QMS, Qwap 8.14712 QMS. Evidence is in `.local/browser-setup/debug-result.json` and adjacent screenshots.
 
-For an HTTP client or worker, start `npm exec -- eve dev --no-ui` and use the [eve client](https://eve.dev/docs/guides/client/overview) against `http://127.0.0.1:2000`. Keep the model credential on the server side. The Coworker runtime key belongs in an ignored `.env.local` file and must not be sent to the model.
+`npm run browser:setup` downloads the pinned extension and runs the Synpress setup. `npm run browser:test` initializes a temporary profile through that same setup on every wallet run: import `QMS_TEST_WALLET_MNEMONIC` from the ignored `.env`, switch MetaMask to popup mode, verify its full address, connect through Qwap, and approve QMS Testnet in the notification popup. Temporary test profiles are removed afterward. Tests do not rely on restored wallet caches.
 
-## Verified on 2026-10-06
+The earlier “Open wallet is stuck” diagnosis was wrong. MetaMask opens Chrome's side panel, marks onboarding complete, and deliberately disables the original tab's button. Reloading the tab displays the dashboard. The setup now switches to popup mode through MetaMask's menu and closes the leftover panel. A notification badge also overlaps the account-menu mouse target; keyboard Enter opens that menu. Synpress's address and network helpers target older UI, so these checks use the observed current UI instead.
 
-- `npm run typecheck` passes with eve 0.71.2.
-- A real local model turn produced a two-sentence swap QA plan using a synthetic request.
-- A second local model turn reported a synthetic missing-notification finding and identified absent recording and chain evidence.
-- Sokosumi rehearsal Task `01a111b3-3bd4-72a7-9aaa-49db0b051164` completed.
-- QMS Testnet transaction `0xbf2dc8012be42f98dd2e208f42536fd796a77da639113335517e64c3de94b619` swapped 0.2 QMS for 0.205119 USDC, above the approved 2.5% slippage minimum of 0.200026 USDC. This was a direct router transaction, not a browser QA run; it does not verify Qwap's wallet flow or success toast.
-- Local MPS is healthy, with a funded Cardano Preprod selling wallet. Wallet QA Masumi registration `cmuwttitd00009y9hg1xigtqo` confirmed on chain. A Preprod-only, seller-scoped ReadAndPay key works.
-- Paid Sokosumi Task `01a111d4-d4a2-76cc-a903-bac8ab4ba797` is RUNNING. Core marked its 1 test USDM claim PURCHASED and FundsLocked. The seller MPS marked the payment `FundsOrDatumInvalid` after its timeout job ran before the scanner reached the lock. Its repair preview found the on-chain transaction has the expected blockchain identifier but the local request has no `collateralReturnLovelace`. The model result is saved, but the signed submission deadline expired; Task completion and seller collection were not attempted. See [payment-incident.md](./payment-incident.md) and private checkpoints before any recovery or retry.
+Fresh setup and the wallet browser test passed on 2026-10-07 (19.3s for the wallet test); the public Qwap test also passed. Typecheck passed. Browser assertions cover full address, connection and network popup contents, connected account, and the extension's QMS balance display. Signing and swap execution remain unverified.
 
-Never treat the PURCHASED claim or Task completion as seller receipt. Do not create another payment claim while this one is unresolved.
+Two runner issues were isolated. Synpress's callback-extraction regex hung on deeply nested setup code; moving the import steps into a helper fixed the extractor and cache build. Separately, both the original saved profile and its copy reopened onboarding after restart. Adding the extension launch flag did not fix that. MetaMask debounces persistence without an awaited flush, making a write race plausible, but the exact persistence failure is unconfirmed. Fresh UI initialization avoids relying on that cache behavior; it does not claim to fix persistence.
+
+Do not treat RPC swaps, CLI transfers, or plan/report fixtures as browser QA success. The earlier Qwap swap used direct RPC calls, not browser automation. No browser swap has been verified.
+
+## Test wallet migration — 2026-10-07
+
+Generated a fresh 24-word recovery phrase with viem and saved it locally in `.env` and `.env.local` (mode 0600, ignored by Git). Active test wallet: `0x6Ba7c2Cb493834d922028EE7B2c33aB99b0c6210`. Previous credentials are retained under `QMS_PREVIOUS_TEST_WALLET_*`.
+
+At the user's explicit request, CLI transactions moved 0.205119 USDC and 8.147124027203572166 QMS from `0x5a6208aD268C30D9641EDce35F420B61bEAF6819` on QMS Testnet (19480). Both receipts succeeded; source QMS and USDC balances are zero. The private local journal `.local/wallet-migration.json` records hashes and verification. These transfers are not browser test evidence.
+The one-off preparation and migration scripts have been removed.
+
+## Local model smoke
+
+In eve's TUI (`npm run dev`, then `/login`):
+
+> Plan a wallet QA job for a Base Sepolia dApp. I need connect + one critical transaction journey and a UI success check. What information is missing?
+
+Or exercise the swap journey template:
+
+> Build the swap_demo test plan for https://swap.example.invalid and summarize cases, quote, and evidence. Then build the swap_demo_fixture report.
+
+Masumi payment rehearsal scripts (`agent-api.mjs`, `paid-flow.mjs`) remain separate from the planning/report core. See [payment-incident.md](./payment-incident.md) before creating another paid claim.
+
+## Verification scope
+
+Regression tests cover skipped/unknown steps, attempt limits, per-attempt evidence,
+unresolved transactions, signing bounds, log redaction, draft approval, template
+inputs, and report delivery. Reports require required artifact manifest entries
+with paths and SHA-256 digests; the caller still supplies those digests. Fixture
+artifacts have no captured files or digests, so fixture delivery is incomplete.
+
+Local verification on 2026-10-07: 50 unit tests and typecheck passed. Using Node 24
+and the local ChatGPT subscription session, the Eve model smoke succeeded and two
+real-model evals passed all nine gates. The browser eval verified that Eve invoked
+Playwright and reported BLOCKED for the unavailable wallet flow; this does not
+mean the wallet browser test passed. Evidence: `.eve/evals/2026-10-06T17-55-54/summary.json`.
+Browser signing/swap and Masumi paid flows remain unverified in this run.

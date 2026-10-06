@@ -12,7 +12,10 @@
     "dev": "eve dev",
     "eval": "eve eval",
     "start": "eve start",
-    "typecheck": "tsc"
+    "test": "node --experimental-strip-types --test agent/lib/**/*.test.ts",
+    "typecheck": "tsc",
+    "browser:setup": "synpress tests/wallet-setup",
+    "browser:test": "playwright test"
   },
   "dependencies": {
     "@vercel/connect": "2.2.0",
@@ -22,8 +25,14 @@
     "zod": "4.5.4"
   },
   "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@synthetixio/synpress": "4.1.2",
     "@types/node": "24.x",
     "typescript": "7.0.2"
+  },
+  "overrides": {
+    "@playwright/test": "$@playwright/test",
+    "playwright-core": "1.63.0"
   },
   "engines": {
     "node": "24.x"

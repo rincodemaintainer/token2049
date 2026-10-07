@@ -3,6 +3,7 @@ import { describe, it } from "node:test";
 import { buildFixedQuote } from "./quote.ts";
 import {
   essentialQuestions,
+  mergeRequiredQuestions,
   swapJourneyQuestions,
 } from "./questions.ts";
 import {
@@ -33,14 +34,20 @@ describe("quote", () => {
 });
 
 describe("essential questions", () => {
-  it("asks only for missing assertion-changing fields", () => {
+  it("does not mark a complete required intake as blocked by optional candidates", () => {
     const qs = essentialQuestions({
       url: "https://app.example",
+      goal: "Check the swap journey",
+      chain: "Base Sepolia",
       chain_id: 84532,
       wallet: "MetaMask",
       transactions_permitted: true,
+      budget_ceiling_units: "1000000",
+      target_chain_performance_collected: true,
+      confirmed: { expected_result: "Output balance increases after confirmation" },
     });
-    assert.equal(qs.length, 0);
+    assert.equal(qs.filter((q) => q.required).length, 0);
+    assert.ok(qs.length > 0);
   });
 
   it("includes swap journey extras when fields are missing", () => {
@@ -50,6 +57,68 @@ describe("essential questions", () => {
     );
     assert.ok(qs.some((q) => q.field === "url"));
     assert.ok(qs.some((q) => q.field === "notification_timeout_seconds"));
+    assert.ok(qs.length > 10);
+    assert.ok(qs.every((q) => q.question.endsWith("?")));
+  });
+
+  it("asks for the chain ID and spend ceiling before a signed transaction plan", () => {
+    const qs = essentialQuestions({
+      chain: "Base Sepolia",
+      transactions_permitted: true,
+    });
+    assert.ok(qs.some((q) => q.id === "Q-CHAIN"));
+    assert.ok(qs.some((q) => q.id === "Q-SPEND-LIMIT"));
+    assert.ok(!qs.some((q) => q.field === "target_chain_performance"));
+  });
+
+  it("does not accept invalid required answers or repeat a false access answer", () => {
+    const qs = essentialQuestions({
+      url: "  ",
+      goal: "Check the swap",
+      chain: "Base Sepolia",
+      chain_id: 84532,
+      wallet: "MetaMask",
+      transactions_permitted: true,
+      budget_ceiling_units: "-1",
+      confirmed: { expected_result: true, access_prerequisites: false },
+    });
+    assert.ok(qs.some((q) => q.id === "Q-URL"));
+    assert.ok(qs.some((q) => q.id === "Q-EXPECTED"));
+    assert.ok(qs.some((q) => q.id === "Q-SPEND-LIMIT"));
+    assert.ok(!qs.some((q) => q.id === "Q-ACCESS"));
+  });
+
+  it("keeps invalid swap answers open and carries custom required fields into later rounds", () => {
+    const confirmed = {
+      expected_result: "Output balance increases",
+      input_token: "   ",
+      output_token: "0xOutput",
+      router_or_spender: " ",
+      input_amount_units: -1,
+      minimum_output_units: false,
+      notification_timeout_seconds: 0,
+    };
+    const custom = {
+      id: "Q-DEST",
+      field: "destination_chain",
+      question: "Which destination chain should receive the asset?",
+      why_needed: "Needed to verify the bridge result",
+      required: true,
+      affected_case_ids: [],
+    };
+    const saved = mergeRequiredQuestions([custom], []);
+    const qs = essentialQuestions({
+      url: "https://app.example",
+      goal: "Bridge a token",
+      chain: "Base Sepolia",
+      chain_id: 84532,
+      wallet: "MetaMask",
+      transactions_permitted: false,
+      confirmed,
+    }, [...swapJourneyQuestions(confirmed), ...saved]);
+    for (const id of ["Q-TOKEN-IN", "Q-SPENDER", "Q-AMOUNT", "Q-MIN-OUT", "Q-NOTIFY", "Q-DEST"]) {
+      assert.ok(qs.some((q) => q.id === id), `${id} must remain unanswered`);
+    }
   });
 });
 

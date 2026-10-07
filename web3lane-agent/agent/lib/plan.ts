@@ -23,6 +23,7 @@ export type PlanDraftInput = {
   requirements: ApprovedPlan["requirements"];
   cases: TestCase[];
   base_fee_units: string;
+  service_asset?: string;
   contingency_percent?: number;
   testing_budget?: ApprovedPlan["budgets"]["testing"];
   limits?: Partial<ExecutionLimits>;
@@ -92,6 +93,7 @@ export function validatePlanStructure(plan: ApprovedPlan): string[] {
 export function buildApprovedPlan(input: PlanDraftInput): ApprovedPlan {
   const service = buildFixedQuote({
     base_fee_units: input.base_fee_units,
+    asset: input.service_asset,
     contingency_percent: input.contingency_percent,
   });
 

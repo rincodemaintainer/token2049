@@ -40,8 +40,8 @@ export default defineTool({
   inputSchema: z.object({
     template: z.enum(["swap_demo", "custom"]).default("custom"),
     job_id: z.string().min(1),
-    base_fee_units: z.string().default("12000000"),
-    contingency_percent: z.number().default(25),
+    base_fee_units: z.literal("1000000").default("1000000"),
+    contingency_percent: z.literal(0).default(0),
     url: z.string().url().or(z.string().min(1)),
     chain: z.string(),
     chain_id: z.number().int().positive(),
@@ -64,6 +64,7 @@ export default defineTool({
         job_id: input.job_id,
         base_fee_units: input.base_fee_units,
         contingency_percent: input.contingency_percent,
+        service_asset: "USDM",
         target: {
           url: ensureUrl(input.url),
           chain: input.chain,
@@ -99,6 +100,7 @@ export default defineTool({
       job_id: input.job_id,
       base_fee_units: input.base_fee_units,
       contingency_percent: input.contingency_percent,
+      service_asset: "USDM",
       target: {
         url: input.url,
         chain: input.chain,

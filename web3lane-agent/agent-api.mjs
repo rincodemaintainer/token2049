@@ -1,7 +1,7 @@
 import {createServer} from 'node:http';
 import {randomUUID} from 'node:crypto';
 import {existsSync,readFileSync,mkdirSync,readdirSync} from 'node:fs';
-import {approvedPlanForJob, assertPaymentQuote, paymentQuoteForPlan, reserveApprovedExecution, confirmedState, finalizeRecordedJob, submitRecordedResult} from './paid-finalization.mjs';
+import {approvedPlanForJob, assertPaymentQuote, paymentQuoteForPlan, reserveApprovedExecution, confirmedState, finalizeRecordedJob, submitRecordedResult, PREPROD_USDM} from './paid-finalization.mjs';
 import {verifyEvidenceBundle} from './scripts/evidence-bundle.mjs';
 import {inputHash,sha256} from './standard-hash.mjs';
 import {paymentDeadlines} from './payment-deadlines.mjs';
@@ -25,13 +25,15 @@ export async function mps(path,body){
  const response=await fetch(process.env.MPS_URL+'/api/v1'+path,{method:body?'POST':'GET',headers:{token,'content-type':'application/json'},body:body?JSON.stringify(body):undefined,signal:AbortSignal.timeout(30000)});
  const data=await response.json();if(!response.ok)throw new Error(`Payment service HTTP ${response.status}`);return data.data;
 }
-async function assertDynamicPaymentSource(reg) {
+async function assertFixedPaymentSource(reg) {
  const query=new URLSearchParams({network:'Preprod',filterAgentIdentifier:reg.agentIdentifier,filterPaymentSourceType:'Web3CardanoV2'});
  const entry=await mps(`/registry?${query}`);
  const source=entry.Assets?.[0]?.supportedPaymentSources?.[reg.supportedPaymentSourceIndex];
  if (entry.Assets?.length !== 1 || source?.chain !== 'Cardano' || source.network !== 'Preprod' ||
-     source.paymentSourceType !== 'Web3CardanoV2' || source.pricing?.pricingType !== 'Dynamic') {
-  throw Object.assign(new Error('Selected registered Cardano payment source must use Dynamic pricing'),{httpStatus:503});
+     source.paymentSourceType !== 'Web3CardanoV2' || source.pricing?.pricingType !== 'Fixed' ||
+     source.pricing.fixed?.length !== 1 || source.pricing.fixed[0].asset !== PREPROD_USDM ||
+     source.pricing.fixed[0].amount !== '1000000') {
+  throw Object.assign(new Error('Selected registered Cardano payment source must use Fixed pricing of exactly 1 tUSDM'),{httpStatus:503});
  }
 }
 const schema={input_data:[{id:'prompt',type:'string',name:'web3lane brief',data:{description:'Describe the approved wallet QA job.'},validations:[{validation:'min',value:'1'},{validation:'max',value:'16000'}]}, {id:'approved_job_id',type:'string',name:'Host-approved job ID'}, {id:'plan_version',type:'number',name:'Approved plan version'}, {id:'approved_plan_hash',type:'string',name:'Approved plan hash'}]};
@@ -86,14 +88,15 @@ const server=createServer({maxHeaderSize:128*1024,requestTimeout:30000,headersTi
   try{approvedPlan=await approvedPlanForJob({input:input.input_data});}
   catch{return respond(res,409,{error:'Missing or stale host-approved plan'});}
   await admitPlan(approvedPlan,buyer.id);
-  const reg=registry();if(reg.registrationState!=='RegistrationConfirmed'&&reg.registration?.state!=='RegistrationConfirmed')return respond(res,503,{error:'Registration not confirmed'});
-  await assertDynamicPaymentSource(reg);
+  const reg=registry();if(!['RegistrationConfirmed','UpdateConfirmed'].includes(reg.registrationState??reg.registration?.state))return respond(res,503,{error:'Registration not confirmed'});
+  await assertFixedPaymentSource(reg);
   const terms=paymentDeadlines();
  const quote=paymentQuoteForPlan(approvedPlan,reg.agentIdentifier);
+ if(quote.RequestedFunds[0].unit!==PREPROD_USDM||quote.RequestedFunds[0].amount!=='1000000')return respond(res,409,{error:'Approve a new plan with the fixed service fee of 1 tUSDM'});
  job={id:randomUUID(),buyerId:buyer.id,nonceKey:key,nonce,input:input.input_data,inputHash:inputHash(input.input_data,nonce),status:'awaiting_payment',phase:'payment-pending',quote};
  try{await reserveApprovedExecution(job);}catch(error){return respond(res,409,{error:error.message});}
  await save(job);
- const payment=await mps('/payment',{network:'Preprod',paymentSourceType:'Web3CardanoV2',supportedPaymentSourceIndex:reg.supportedPaymentSourceIndex,inputHash:job.inputHash,agentIdentifier:reg.agentIdentifier,identifierFromPurchaser:nonce,RequestedFunds:quote.RequestedFunds,...terms});
+ const payment=await mps('/payment',{network:'Preprod',paymentSourceType:'Web3CardanoV2',supportedPaymentSourceIndex:reg.supportedPaymentSourceIndex,inputHash:job.inputHash,agentIdentifier:reg.agentIdentifier,identifierFromPurchaser:nonce,...terms});
  job.payment=payment;await save(job);assertPaymentQuote(payment,job);job.phase='waiting-payment';job.response={id:job.id,input_hash:job.inputHash,identifierFromPurchaser:nonce,blockchainIdentifier:payment.blockchainIdentifier,agentIdentifier:reg.agentIdentifier,sellerVKey:reg.sellerVkey,paymentSourceType:'Web3CardanoV2',supportedPaymentSourceIndex:reg.supportedPaymentSourceIndex,payByTime:Number(payment.payByTime),submitResultTime:Number(payment.submitResultTime),unlockTime:Number(payment.unlockTime),externalDisputeUnlockTime:Number(payment.externalDisputeUnlockTime)};await save(job);return respond(res,200,job.response);
  }finally{activeStarts.delete(nonce);}
  }catch(e){respond(res,e.httpStatus||500,{error:e.httpStatus?e.message:'Request failed. Inspect the saved job state before retrying.'})}

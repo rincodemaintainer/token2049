@@ -6,6 +6,9 @@ import {mkdtemp, mkdir, rm, writeFile} from 'node:fs/promises';
 import {tmpdir} from 'node:os';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {approvePlan} from './agent/lib/plan.ts';
+import {buildFixedQuote} from './agent/lib/quote.ts';
+import {PREPROD_USDM} from './paid-finalization.mjs';
 import {buildSwapDemoPlan} from './agent/lib/fixtures/swap-demo.ts';
 import {provisionTestService,buyerFetch} from './tests/service-fixtures.mjs';
 
@@ -19,18 +22,20 @@ test('disabled x402 route cannot alter the existing Masumi checkout',async()=>{
  const mps=createServer(async(req,res)=>{
   if(req.method==='GET'&&new URL(req.url,'http://127.0.0.1').pathname==='/api/v1/registry'){
    res.writeHead(200,{'content-type':'application/json'});
-   return res.end(JSON.stringify({data:{Assets:[{supportedPaymentSources:[{chain:'Cardano',network:'Preprod',paymentSourceType:'Web3CardanoV2',pricing:{pricingType:'Dynamic'}}]}]}}));
+   return res.end(JSON.stringify({data:{Assets:[{supportedPaymentSources:[{chain:'Cardano',network:'Preprod',paymentSourceType:'Web3CardanoV2',pricing:{pricingType:'Fixed',fixed:[{asset:PREPROD_USDM,amount:'1000000'}]}}]}]}}));
   }
   let body='';for await(const part of req)body+=part;
-  const request=JSON.parse(body);res.writeHead(200,{'content-type':'application/json'});
-  res.end(JSON.stringify({data:{...request,RequestedFunds:request.RequestedFunds.map(fund=>({...fund,unit:fund.unit==='lovelace'?'':fund.unit})),blockchainIdentifier:'legacy-payment',PaymentSource:{network:'Preprod'}}}));
+  const request=JSON.parse(body);assert.equal(request.RequestedFunds,undefined);res.writeHead(200,{'content-type':'application/json'});
+  res.end(JSON.stringify({data:{...request,RequestedFunds:[{unit:PREPROD_USDM,amount:'1000000'}],blockchainIdentifier:'legacy-payment',PaymentSource:{network:'Preprod'}}}));
  });
  const mpsPort=await listen(mps);const probe=createServer();const port=await listen(probe);await close(probe);
  try {
   const serviceEnv=await provisionTestService(directory);
-  const plan=buildSwapDemoPlan();await mkdir(join(directory,'.local','approved-plans'),{recursive:true});
+  let plan=buildSwapDemoPlan();const approval=plan.approval;delete plan.approval;
+  plan.budgets.service=buildFixedQuote({base_fee_units:'1000000',contingency_percent:0,asset:'USDM'});plan=approvePlan(plan,approval);
+  await mkdir(join(directory,'.local','approved-plans'),{recursive:true});
   await writeFile(join(directory,'.local','approved-plans',`${plan.job_id}.json`),JSON.stringify(plan));
-  await writeFile(join(directory,'.local','registration-state.json'),JSON.stringify({registrationState:'RegistrationConfirmed',agentIdentifier:'test-agent',supportedPaymentSourceIndex:0,sellerVkey:'test-seller'}));
+  await writeFile(join(directory,'.local','registration-state.json'),JSON.stringify({registrationState:'UpdateConfirmed',agentIdentifier:'test-agent',supportedPaymentSourceIndex:0,sellerVkey:'test-seller'}));
   child=spawn(process.execPath,[join(source,'agent-api.mjs')],{cwd:directory,env:{...serviceEnv,AGENT_API_PORT:String(port),MPS_URL:`http://127.0.0.1:${mpsPort}`,MPS_RUNTIME_TOKEN:'test'},stdio:['ignore','pipe','pipe']});
   await new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(new Error('API startup timeout')),5000);child.once('exit',code=>{clearTimeout(timer);reject(new Error(`API exited ${code}`));});child.stdout.on('data',data=>{if(String(data).includes('Agent API running')){clearTimeout(timer);resolve();}});});
   const x402=await buyerFetch(`http://127.0.0.1:${port}/x402/jobs`,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(input(plan))});

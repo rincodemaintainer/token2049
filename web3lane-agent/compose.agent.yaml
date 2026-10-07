@@ -1,0 +1,43 @@
+services:
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+    image: web3lane-eve:bedrock
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 30s
+    ports:
+      - "127.0.0.1:21960:3000"
+    env_file:
+      - ${WEB3LANE_AGENT_ENV_FILE:?Set the absolute agent environment file path}
+    environment:
+      NODE_ENV: production
+      WEB3LANE_SELF_HOSTED: "1"
+      WEB3LANE_MODEL_PROVIDER: bedrock
+      AWS_REGION: ap-southeast-1
+    volumes:
+      - agent-workflows:/app/.eve/.workflow-data
+      - agent-sandboxes:/app/.eve/sandbox-cache/just-bash/sessions
+      - agent-local:/app/.local
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 2g
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000/eve/v1/health').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  agent-workflows:
+  agent-sandboxes:
+  agent-local:

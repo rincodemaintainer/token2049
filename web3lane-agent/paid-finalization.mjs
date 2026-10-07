@@ -29,7 +29,7 @@ export const confirmedState = (payment, expected) =>
   (payment.CurrentTransaction?.status === 'Confirmed' && payment.CurrentTransaction?.newOnChainState === expected) ||
   payment.TransactionHistory?.some(tx => tx.status === 'Confirmed' && tx.newOnChainState === expected) || false;
 
-const PREPROD_USDM = '16a55b2a349361ff88c03788f93e1e966e5d689605d044fef722ddde0014df10745553444d';
+export const PREPROD_USDM = '16a55b2a349361ff88c03788f93e1e966e5d689605d044fef722ddde0014df10745553444d';
 const X402_NETWORK = 'cardano:preprod';
 export function paymentQuoteForPlan(plan, agentIdentifier) {
   const service = plan.budgets?.service;

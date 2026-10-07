@@ -152,6 +152,10 @@ The separate Next.js app generates static report pages from verified imported fi
 
 ## Persistent paid/browser host
 
+Deployment update (2026-10-07): Vercel `token2049-green.vercel.app` and AWS runner image `web3lane-paid-browser:fixed-1-tusdm` contain fixed-price support. The runner uses `/etc/wallet-qa/fixed-price-service.env`, a Preprod-only seller-scoped read/pay MPS key, and the durable registration binding at `/app/.local/registration-state.json`. Registry price changes must reach `UpdateConfirmed` before binding the replacement agent identifier.
+
+New Masumi preprod checkouts use **Fixed pricing: 1 tUSDM** (`1000000` base units, 6 decimals). The registered Cardano V2 source and the buyer-approved plan must both match that exact asset and amount. The plan tool quotes 1 tUSDM with zero extra contingency. Old plans with different fees require a new buyer approval; existing paid jobs retain their saved terms. Fixed-price payment requests omit `RequestedFunds` so MPS derives the price from registration, then the runner verifies the returned amount.
+
 The paid API runs on one persistent Linux host, separately from Eve and the static report app. See [deployment and adapter setup](deploy/PAID-SERVICE.md). `WEB3LANE_DATA_ROOT` holds durable jobs, approvals, reservations, execution records, and evidence. Atomic writes are fsynced; a process lock prevents a second API instance. An unclean stop requires operator reconciliation before restarting.
 
 Checkout and status endpoints require `Authorization: Bearer <buyer-token>`. Provision buyer IDs and SHA-256 token hashes in `api-clients.json`; the buyer ID must match the host-approved plan's `approval.requester_id`. Jobs retain their buyer ID, so knowing a job UUID does not grant access. Only `/availability` and `/input_schema` are public. Existing jobs without a buyer ID require an operator migration before API access.

@@ -28,12 +28,15 @@
     "test:x402": "node --test x402-checkout.test.mjs x402-client.test.mjs x402-api.test.mjs x402-http.test.mjs"
   },
   "dependencies": {
+    "@ai-sdk/amazon-bedrock": "5.0.108",
+    "@aws-sdk/credential-providers": "3.1147.0",
     "@vercel/connect": "2.2.0",
     "@x402/cardano": "2.28.0",
     "@x402/core": "2.28.0",
     "@x402/fetch": "2.28.0",
     "ai": "^7.0.105",
     "eve": "^0.71.2",
+    "just-bash": "3.1.0",
     "microsandbox": "^0.5.10",
     "viem": "^2.57.3",
     "zod": "4.5.4"

@@ -20,13 +20,17 @@ const targetChainPerformance = {
   wallet_interaction_buffer_seconds: 120,
 };
 
-it("template respects supplied target and quote without inventing buyer approval", async () => {
-  const input = planTool.inputSchema.parse({ template: "swap_demo", job_id: "test", url: "https://test.example", chain: "Other test chain", chain_id: 123, wallet: "TestWallet", base_fee_units: "100", contingency_percent: 10, requester_id: "buyer", target_chain_performance: { ...targetChainPerformance, chain: "Other test chain", chain_id: 123 } });
+it("swap template fixes the quote at 1 tUSDM without inventing buyer approval", async () => {
+  const input = planTool.inputSchema.parse({ template: "swap_demo", job_id: "test", url: "https://test.example", chain: "Other test chain", chain_id: 123, wallet: "TestWallet", requester_id: "buyer", target_chain_performance: { ...targetChainPerformance, chain: "Other test chain", chain_id: 123 } });
   const result = await planTool.execute(input);
   assert.equal(result.plan.target.chain_id, 123);
   assert.equal(result.plan.target.wallet, "TestWallet");
   assert.equal(result.plan.target.domain, "test.example");
-  assert.equal(result.quote.fixed_total_units, "110");
+  assert.equal(result.quote.asset, "USDM");
+  assert.equal(result.quote.base_fee_units, "1000000");
+  assert.equal(result.quote.contingency_percent, 0);
+  assert.equal(result.quote.contingency_units, "0");
+  assert.equal(result.quote.fixed_total_units, "1000000");
   assert.equal(result.plan.approval, undefined);
 });
 it("model drafts commentary without packing authoritative results", async () => {
@@ -51,6 +55,29 @@ it("custom draft does not treat requester identity as approval", async () => {
     target_chain_performance: targetChainPerformance,
   }));
   assert.equal(result.plan.approval, undefined);
+  assert.equal(result.quote.asset, "USDM");
+  assert.equal(result.quote.fixed_total_units, "1000000");
+  assert.equal(result.quote.contingency_units, "0");
+});
+
+it("rejects plan quote overrides", () => {
+  const common = {
+    template: "swap_demo" as const,
+    job_id: "fixed-quote",
+    url: "https://test.example",
+    chain: "Base Sepolia",
+    chain_id: 84532,
+    wallet: "TestWallet",
+    target_chain_performance: targetChainPerformance,
+  };
+  assert.throws(
+    () => planTool.inputSchema.parse({ ...common, base_fee_units: "999999" }),
+    /1000000/,
+  );
+  assert.throws(
+    () => planTool.inputSchema.parse({ ...common, contingency_percent: 1 }),
+    /0/,
+  );
 });
 
 it("generates Cypress source only for an exact approved plan", async () => {

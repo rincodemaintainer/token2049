@@ -1,39 +1,83 @@
+# web3lane — judges’ slide script
+
+Revised 7 October 2026. Existing 10-slide sequence; approximately 6 minutes, excluding demo playback. Implementation claims reflect the current repository and recorded deployment. The existing slide images and PPTX have not been updated to match this script.
+
 ## Slide 1: Hire a wallet QA agent. Get evidence for every result.
 
-Small Web3 teams ship wallet journeys without a dedicated end-to-end QA team. web3lane turns a short request into agreed checks, a bounded run, and evidence a developer can inspect. The button is not the proof: we need to know what the browser showed, what the wallet signed, and what the chain did.
+Small Web3 teams ship wallet journeys without a dedicated QA team. When something goes wrong, developers piece together browser screenshots, wallet activity, and explorer tabs.
+
+web3lane turns a short request into agreed checks, a bounded test run, and evidence a developer can inspect. Our starting point is one critical wallet journey. Our promise is simple: the button is not the proof.
 
 ## Slide 2: Wallet journeys fail between browser, wallet, and chain
 
-A wallet journey crosses three surfaces. A transaction can settle successfully while a required browser behavior fails, and a browser message can look successful before the chain confirms anything. Manual testing often leaves these pieces in separate screenshots and explorer tabs. Our product joins them into one claim with its supporting evidence and an honest unresolved state when cause is unknown.
+A wallet journey crosses three surfaces: the application, the wallet, and the chain. Each can tell a different story.
+
+A transaction can settle while the interface fails an expected behavior. A success message can appear before the transaction is confirmed. Checking only one surface misses the problem.
+
+web3lane connects those observations to the same test. The developer sees what happened, which expectation failed, and what remains unknown.
 
 ## Slide 3: Agree on the test before the agent spends
 
-The buyer starts with a URL and goal. The agent generates a longer pool of planning questions. Laya scores their usefulness and reviews the wording; the buyer sees up to ten at a time, with required fields first. Unclear questions are rewritten before the agent proposes cases and a fixed quote. Laya's review is advisory; the buyer approves the exact expectations and spending limits. That approval binds the payment and later evidence. Green steps are application code; amber steps still require a trusted host or operator. Payment confirmation does not automatically start a browser worker today.
+The buyer starts with a URL and a goal. Eve asks up to five ranked questions per round. Laya helps rank useful questions and flag unclear wording; required details still come first.
+
+The agent probes the target chain’s response and block timing to inform execution limits. It then proposes a versioned plan: exact assertions, required evidence, a service quote, and separate wallet-spending limits.
+
+The buyer approves that scope. The trusted host stores its version and hash, so payment and execution refer to the same agreement. Chat approval still needs that host handoff.
 
 ## Slide 4: A five-step buyer journey
 
-This is the intended buyer experience, shown as a concept where screens are unfinished. Request the journey, answer the ranked planning questions, approve assertions and limits, fund the service, watch the bounded run, then read findings with evidence and reproduction steps. Each screen should make the next decision clear, especially the difference between the service fee and test funds. The report should also explain when delivery needs human review.
+The journey is request, approve, fund, run, and inspect.
+
+The chat client now supports streamed answers, planning questions, tool approvals, and session replay. Behind it, Eve handles planning on Vercel. The persistent QA runner, Masumi, and PostgreSQL share an EC2 host in Singapore, reached through an HTTPS gateway.
+
+The paid service checks runner support before checkout and dispatches confirmed funded jobs one at a time. The current adapter targets one Qwap swap journey. Reports are exported and published separately. This is implemented infrastructure with a narrow execution scope; the chat-to-checkout handoff still needs integration.
 
 ## Slide 5: The swap landed. The test failed.
 
-Here is the useful distinction in our recorded Qwap run. The browser wallet signed one 0.01 QMS swap. The chain receipt succeeded, and read-only reconciliation found 0.009915 USDC delivered. The Playwright test still failed because the expected explorer tab did not open. We have not established why, so this is a failed browser assertion with an unresolved cause, not a proven app defect. The evidence lets a developer investigate without confusing transaction success with test success.
+Our recorded Qwap run shows why this matters.
+
+The browser wallet signed a 0.01 QMS swap. The chain receipt succeeded, and read-only reconciliation found 0.009915 USDC delivered. But the browser test failed because the expected explorer tab did not open.
+
+That is a failed browser assertion with an unresolved cause. It does not establish an application defect, and it does not erase the successful transaction.
+
+The developer gets both facts and the evidence needed to investigate.
 
 ## Slide 6: What Cardano contributes to the purchase
 
-Cardano is the settlement layer for buying the QA service; the application under test can be on another chain. Masumi provides service identity, escrow, and a path to submit a result hash. The prior preprod rehearsal reached a confirmed funds lock, but its paid QA result was not submitted. A result hash binds delivered bytes; it does not prove our QA judgment is right, and result submission alone is not seller collection. That complete paid loop is our next milestone.
+Cardano settles the purchase of the QA service. The application under test can run on another chain, as Qwap does here.
+
+Our Masumi route uses service registration, escrow, and result-hash submission. The current Preprod service fee is fixed at one tUSDM, separate from test funds and transaction fees.
+
+The service checks confirmed funding before execution and verifies the evidence before submitting a result hash. That hash binds the delivered result; it does not prove the QA judgment. Result submission and seller collection are separate states.
 
 ## Slide 7: A separate direct x402 route for agent buyers
 
-We also built a separate direct x402 route for an agent buyer. The buyer receives an exact quote bound to an approved plan, signs one Cardano payment, and retries an uncertain settlement with the same signature. This is a direct transfer, so it does not inherit Masumi escrow refunds. Local tests cover the protocol and state transitions, but live preprod settlement and automatic browser dispatch still need validation.
+For another agent buying QA, we also implement a direct Cardano x402 route.
+
+The buyer receives a quote tied to an approved plan, checks its terms, and signs one payment. If settlement is uncertain, retries reuse that same signed payment. Once confirmed, the job enters the funded execution path.
+
+This route is a direct transfer, with no automatic escrow refund. Protocol and recovery tests use fixtures; live x402 settlement remains a separate validation step.
 
 ## Slide 8: Evidence before verdict
 
-The host checks that captured observations and files match the approved plan, session, and payment. Missing critical work or an unresolved transaction blocks paid finalization. When delivery is complete, the buyer receives an inspectable HTML report with machine-readable data, an evidence ZIP containing screenshots, the recording, RPC proof, and logs, plus a manifest listing file sizes and SHA-256 hashes. The package makes the finding reviewable; it does not prove payment completion by itself. Optional agent commentary cannot override recorded outcomes.
+The host verifies captured files against the approved plan and execution session. Missing critical work or an unresolved transaction blocks paid finalization. A conclusive application failure can still be a useful, complete QA delivery.
+
+The output includes an inspectable HTML report, machine-readable results, an evidence archive, and a manifest with file hashes. Screenshots, recordings, and chain proof support the verdict; optional agent commentary cannot override it.
+
+For follow-up testing, the agent can also generate Cypress assertions from a stored approved plan. Those scripts test the dApp; wallet execution belongs to the dedicated runner.
 
 ## Slide 9: A narrow buyer, a measurable service
 
-Our first buyer is a small Web3 team with one important wallet journey and no dedicated wallet QA specialist. The current workaround is a developer manually checking the UI, wallet, and explorer. A pilot should measure elapsed time, execution cost, and whether the resulting finding was actionable. Pricing and adoption are hypotheses today; we have not invented traction or unit economics.
+Our first buyer is a small Web3 team with one important wallet journey and no dedicated wallet QA specialist.
 
-## Slide 10: Proven today. Next: one paid QA loop.
+The value is less time reconstructing what happened and clearer evidence for the next debugging decision. In a pilot, we will measure turnaround time, execution cost, and whether findings lead to useful fixes.
 
-Today we can show the planning and report core, wallet connection, and one browser swap whose chain result we reconciled. The browser run and paid payment rehearsal are separate pieces. Our next proof is one approved scope, confirmed Cardano funding, bounded execution, and a delivered report all linked to the same job. We are looking for one pilot team and one scoped wallet journey to validate that full purchase and delivery experience.
+One tUSDM is our current testnet service price. Commercial pricing and customer demand still need validation.
+
+## Slide 10: From implemented service to a verified paid journey
+
+We have the planning tools, chat client, deployed paid-service infrastructure, a scoped Qwap runner, and evidence reports. Our recorded browser swap demonstrates why transaction success and test success need separate proof.
+
+The next acceptance milestone is one complete paid journey: a stored approved plan, confirmed Cardano funding, bounded browser execution, and a verified report with confirmed payment-linked delivery.
+
+We are looking for one pilot team and one critical wallet flow. Agree on the test. Run within limits. Inspect the proof.

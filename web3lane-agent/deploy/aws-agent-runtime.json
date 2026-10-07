@@ -1,0 +1,91 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "Web3lane Eve agent runtime access: scoped Bedrock Mantle inference and a separate agent bearer credential.",
+  "Metadata": {
+    "AWSToolsMetrics": {
+      "AWSAgentToolkit": "aws-cloudformation@3"
+    }
+  },
+  "Parameters": {
+    "RunnerRoleName": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "AgentBearerSecret": {
+      "Type": "AWS::SecretsManager::Secret",
+      "DeletionPolicy": "Retain",
+      "UpdateReplacePolicy": "Retain",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Generate agent authentication server-side without exposing its value.",
+          "must": [
+            "Do not output the bearer value or share the paid-service buyer token."
+          ]
+        }
+      },
+      "Properties": {
+        "Description": "Web3lane Eve agent bearer authentication",
+        "GenerateSecretString": {
+          "SecretStringTemplate": "{\"id\":\"eve-agent\"}",
+          "GenerateStringKey": "token",
+          "PasswordLength": 48,
+          "ExcludePunctuation": true
+        }
+      }
+    },
+    "AgentRuntimeAccess": {
+      "Type": "AWS::IAM::Policy",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Supplement the existing EC2 role without changing paid-runner permissions.",
+          "must": [
+            "Allow only the selected model and the agent-specific authentication secret."
+          ]
+        }
+      },
+      "Properties": {
+        "PolicyName": "Web3laneEveBedrockMantle",
+        "Roles": [
+          {
+            "Ref": "RunnerRoleName"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Sid": "InvokeLuna",
+              "Effect": "Allow",
+              "Action": "bedrock-mantle:CreateInference",
+              "Resource": {
+                "Fn::Sub": "arn:${AWS::Partition}:bedrock-mantle:us-east-1:${AWS::AccountId}:project/default"
+              },
+              "Condition": {
+                "StringEquals": {
+                  "bedrock-mantle:Model": "openai.gpt-5.6-luna"
+                }
+              }
+            },
+            {
+              "Sid": "ReadAgentAuthentication",
+              "Effect": "Allow",
+              "Action": "secretsmanager:GetSecretValue",
+              "Resource": {
+                "Ref": "AgentBearerSecret"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "AgentBearerSecretArn": {
+      "Description": "Secret ARN, never the credential value",
+      "Value": {
+        "Ref": "AgentBearerSecret"
+      }
+    }
+  }
+}

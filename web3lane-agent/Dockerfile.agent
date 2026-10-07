@@ -1,0 +1,18 @@
+FROM node:24-bookworm-slim
+
+WORKDIR /app
+ENV WEB3LANE_SELF_HOSTED=1
+
+COPY package.json package-lock.json ./
+RUN npm ci
+COPY agent ./agent
+COPY tsconfig.json service-storage.mjs ./
+RUN npm run build \
+    && mkdir -p /app/.eve/.workflow-data /app/.eve/sandbox-cache/just-bash/sessions /app/.local \
+    && chown -R node:node /app
+
+ENV NODE_ENV=production \
+    PORT=3000
+USER node
+EXPOSE 3000
+CMD ["./node_modules/.bin/eve", "start", "--host", "0.0.0.0", "--port", "3000"]

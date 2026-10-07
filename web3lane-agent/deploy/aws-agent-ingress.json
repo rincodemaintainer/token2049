@@ -1,0 +1,256 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "web3lane Eve HTTPS ingress - isolated CloudFront VPC origin for SSE; no custom domain and no paid API changes.",
+  "Metadata": {
+    "AWSToolsMetrics": {
+      "AWSAgentToolkit": "aws-cloudformation@3"
+    },
+    "com.aws.cloudformation.Context": {
+      "arch": "CloudFront HTTPS -> VPC origin -> existing internal ALB -> Nginx -> loopback Eve container",
+      "must": [
+        "Keep paid API Gateway routes and their load-balancer access unchanged.",
+        "Do not deploy until the selected Bedrock model can complete a live authenticated agent turn."
+      ]
+    }
+  },
+  "Parameters": {
+    "InternalLoadBalancerArn": {
+      "Type": "String",
+      "Description": "ARN of the existing internal ALB. Deploy only after it is confirmed eligible for a CloudFront VPC origin."
+    },
+    "InternalLoadBalancerDnsName": {
+      "Type": "String",
+      "Description": "DNS name of the existing internal ALB."
+    },
+    "InternalLoadBalancerSecurityGroupId": {
+      "Type": "AWS::EC2::SecurityGroup::Id",
+      "Description": "Security group attached to the internal ALB."
+    },
+    "CloudFrontOriginPrefixListId": {
+      "Type": "String",
+      "AllowedPattern": "^pl-[a-f0-9]+$",
+      "Description": "Regional ID of the AWS-managed com.amazonaws.global.cloudfront.origin-facing prefix list."
+    }
+  },
+  "Resources": {
+    "CloudFrontToInternalAlb": {
+      "Type": "AWS::EC2::SecurityGroupIngress",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Permits CloudFront VPC-origin traffic without altering the existing API Gateway VPC-link rule.",
+          "must": [
+            "Use the regional AWS-managed CloudFront origin-facing prefix list.",
+            "Do not replace or broaden the paid API security-group ingress."
+          ]
+        }
+      },
+      "Properties": {
+        "GroupId": {
+          "Ref": "InternalLoadBalancerSecurityGroupId"
+        },
+        "IpProtocol": "tcp",
+        "FromPort": 80,
+        "ToPort": 80,
+        "SourcePrefixListId": {
+          "Ref": "CloudFrontOriginPrefixListId"
+        },
+        "Description": "CloudFront VPC origin traffic to Eve ingress"
+      }
+    },
+    "EveVpcOrigin": {
+      "Type": "AWS::CloudFront::VpcOrigin",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Keeps the Eve origin private while CloudFront provides the public HTTPS endpoint.",
+          "must": [
+            "The referenced ALB must satisfy current CloudFront VPC-origin subnet requirements.",
+            "Do not move the paid API ALB to make this resource work."
+          ]
+        }
+      },
+      "Properties": {
+        "VpcOriginEndpointConfig": {
+          "Arn": {
+            "Ref": "InternalLoadBalancerArn"
+          },
+          "Name": {
+            "Fn::Sub": "${AWS::StackName}-eve"
+          },
+          "OriginProtocolPolicy": "http-only",
+          "HTTPPort": 80,
+          "IpAddressType": "ipv4"
+        }
+      }
+    },
+    "EveIngressCachePolicy": {
+      "Type": "AWS::CloudFront::CachePolicy",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Prevents cached workflow and server-sent event responses.",
+          "must": [
+            "Keep all TTLs at zero."
+          ]
+        }
+      },
+      "Properties": {
+        "CachePolicyConfig": {
+          "Name": {
+            "Fn::Sub": "${AWS::StackName}-eve-no-cache"
+          },
+          "Comment": "Never cache Eve workflow or SSE responses.",
+          "DefaultTTL": 0,
+          "MaxTTL": 0,
+          "MinTTL": 0,
+          "ParametersInCacheKeyAndForwardedToOrigin": {
+            "EnableAcceptEncodingBrotli": false,
+            "EnableAcceptEncodingGzip": false,
+            "CookiesConfig": {
+              "CookieBehavior": "none"
+            },
+            "HeadersConfig": {
+              "HeaderBehavior": "none"
+            },
+            "QueryStringsConfig": {
+              "QueryStringBehavior": "none"
+            }
+          }
+        }
+      }
+    },
+    "EveIngressRequestPolicy": {
+      "Type": "AWS::CloudFront::OriginRequestPolicy",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Preserves Eve authentication, session, and workflow request data at the private origin.",
+          "must": [
+            "Forward Authorization without including the viewer Host header."
+          ]
+        }
+      },
+      "Properties": {
+        "OriginRequestPolicyConfig": {
+          "Name": {
+            "Fn::Sub": "${AWS::StackName}-eve-all-viewer"
+          },
+          "Comment": "Forward Eve auth, session, and workflow request data; CloudFront supplies the origin Host header.",
+          "CookiesConfig": {
+            "CookieBehavior": "all"
+          },
+          "HeadersConfig": {
+            "HeaderBehavior": "allViewerExceptHostHeader"
+          },
+          "QueryStringsConfig": {
+            "QueryStringBehavior": "all"
+          }
+        }
+      }
+    },
+    "EvePathGuard": {
+      "Type": "AWS::CloudFront::Function",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Prevents the public CloudFront hostname from reaching paid-service paths on the shared ALB.",
+          "must": [
+            "Allow only /eve and /.well-known/workflow paths."
+          ]
+        }
+      },
+      "Properties": {
+        "Name": {
+          "Fn::Sub": "${AWS::StackName}-eve-path-guard"
+        },
+        "AutoPublish": true,
+        "FunctionConfig": {
+          "Comment": "Allow only Eve and workflow discovery paths through the public distribution.",
+          "Runtime": "cloudfront-js-2.0"
+        },
+        "FunctionCode": "function handler(event) {\n  var uri = event.request.uri;\n  if (uri === '/eve' || uri.indexOf('/eve/') === 0 || uri === '/.well-known/workflow' || uri.indexOf('/.well-known/workflow/') === 0) {\n    return event.request;\n  }\n  return { statusCode: 404, statusDescription: 'Not Found', headers: { 'cache-control': { value: 'no-store' } } };\n}\n"
+      }
+    },
+    "EveIngressDistribution": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Metadata": {
+        "com.aws.cloudformation.Context": {
+          "why": "Provides a standalone cloudfront.net HTTPS endpoint for Eve without a custom domain.",
+          "must": [
+            "Keep CloudFront response completion timeout unset for long-lived SSE.",
+            "Do not add paid API paths or behaviors to this distribution."
+          ]
+        }
+      },
+      "Properties": {
+        "DistributionConfig": {
+          "Comment": "Public HTTPS Eve agent ingress. The generated cloudfront.net hostname is the endpoint.",
+          "Enabled": true,
+          "HttpVersion": "http2and3",
+          "IPV6Enabled": true,
+          "Origins": [
+            {
+              "Id": "eve-internal-alb",
+              "DomainName": {
+                "Ref": "InternalLoadBalancerDnsName"
+              },
+              "VpcOriginConfig": {
+                "VpcOriginId": {
+                  "Fn::GetAtt": [
+                    "EveVpcOrigin",
+                    "Id"
+                  ]
+                },
+                "OriginReadTimeout": 120,
+                "OriginKeepaliveTimeout": 60
+              }
+            }
+          ],
+          "DefaultCacheBehavior": {
+            "TargetOriginId": "eve-internal-alb",
+            "ViewerProtocolPolicy": "https-only",
+            "AllowedMethods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD"
+            ],
+            "CachePolicyId": {
+              "Ref": "EveIngressCachePolicy"
+            },
+            "OriginRequestPolicyId": {
+              "Ref": "EveIngressRequestPolicy"
+            },
+            "FunctionAssociations": [
+              {
+                "EventType": "viewer-request",
+                "FunctionARN": {
+                  "Fn::GetAtt": [
+                    "EvePathGuard",
+                    "FunctionMetadata.FunctionARN"
+                  ]
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "Outputs": {
+    "AgentHttpsUrl": {
+      "Description": "Set QA_AGENT_URL to this URL after health, authenticated streaming, reconnect, and restart recovery checks pass.",
+      "Value": {
+        "Fn::Sub": "https://${EveIngressDistribution.DomainName}"
+      }
+    },
+    "DistributionId": {
+      "Value": {
+        "Ref": "EveIngressDistribution"
+      }
+    }
+  }
+}

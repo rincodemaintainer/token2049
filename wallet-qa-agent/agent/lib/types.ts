@@ -134,6 +134,7 @@ export type ApprovedPlan = {
 export type EssentialQuestion = {
   id: string;
   field: string;
+  question: string;
   why_needed: string;
   options?: string[];
   required: boolean;

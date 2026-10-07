@@ -1,0 +1,464 @@
+{
+  "deck_name": "wallet-qa-judges-deck",
+  "language": "English",
+  "goal": "A concise, honest 10-slide TOKEN2049 ORIGINS pitch for Cardano judges: customer pain, Wallet QA value, real swap evidence, Cardano payment role, implementation limits, and pilot ask.",
+  "deck_context": {
+    "source_summary": "Wallet QA turns a small Web3 team's request into approved assertions, bounded real-wallet testing, and an evidence-backed report. Cardano preprod is for buying the QA service, while the tested app may run on another chain. Masumi escrow and direct x402 are separate routes. A real browser swap succeeded on chain but the Playwright assertion for an explorer tab failed; cause unresolved. Paid host-to-browser handoff remains manual. No complete paid QA loop or live x402 settlement is verified.",
+    "core_claim": "The button is not the proof: a useful QA result reconciles browser, wallet, and chain evidence against buyer-approved expectations.",
+    "canonical_terms": [
+      "Wallet QA",
+      "Masumi escrow",
+      "direct x402",
+      "approved plan",
+      "trusted host",
+      "evidence-backed report"
+    ],
+    "status_legend": "Verified means directly observed/tested; partial means code exists but integration or live validation remains; planned means future work."
+  },
+  "selected_image_backend": "built-in image tool",
+  "max_concurrent_slides": 3,
+  "sample_generation_method": {
+    "backend_used": "built-in image tool",
+    "tool_name": "image_gen__imagegen",
+    "mode": "edit",
+    "prompt_source": "approved slide 3 initial generation prompt plus user-requested legend/logo edit in this chat",
+    "size": "built-in default landscape; generated sample 1672x940 (16:9)",
+    "quality": "built-in default; exact model/config not exposed",
+    "approved_sample_path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/origin_image/slide_03.png",
+    "input_context_preparation": "Parent viewed local logos and sample with view_image; workers use referenced_image_paths for the approved sample and strict input assets.",
+    "handoff_rule": "Use built-in image_gen__imagegen with referenced_image_paths and sample as style-only input; return a blocker if unavailable."
+  },
+  "style": {
+    "name": "Wallet QA editorial sage",
+    "visual_direction": "Match approved slide 3: light sage canvas, precise forest-green editorial typography, bright lime result emphasis, slim lines, rounded flat cards, minimal organic corner shapes, abundant whitespace. Clean, beautiful, technically credible. Every slide has compact paired Wallet QA and TOKEN2049 ORIGINS logos at bottom right on deep forest panel.",
+    "color_palette": "light sage #E8EBE6, deep forest #163300, lime #9FE870, cream white, restrained amber only for trusted host/manual states, neutral gray for external",
+    "typography": "large heavy modern sans-serif titles, clear regular subtitles and readable diagram/card labels; no tiny text",
+    "texture_and_finish": "flat polished presentation art, no 3D, no photographic stock art, no glossy gradients"
+  },
+  "approved_style_reference": {
+    "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/origin_image/slide_03.png",
+    "role": "approved sample slide style reference only",
+    "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+  },
+  "slides": [
+    {
+      "number": 1,
+      "title": "Hire a wallet QA agent. Get evidence for every result.",
+      "role": "cover",
+      "intent": "cover",
+      "key_points": [
+        "For small Web3 teams",
+        "The button is not the proof"
+      ],
+      "local_context": {
+        "required_background": "Product promise, not a claim of a fully autonomous live commercial loop."
+      },
+      "layout": {
+        "composition": "Bold asymmetric cover: oversized headline left, one elegant browser-wallet-chain motif right, sparse support line; paired logos bottom right.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "A single abstract sequence connecting browser, wallet, and chain to a verified report; no fake UI screens."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete."
+      ]
+    },
+    {
+      "number": 2,
+      "title": "Wallet journeys fail between browser, wallet, and chain",
+      "role": "problem",
+      "intent": "problem",
+      "key_points": [
+        "A transaction can settle while a UI expectation fails",
+        "Manual QA rarely reconciles all three surfaces",
+        "A useful finding needs reproducible evidence"
+      ],
+      "local_context": {
+        "required_background": "The observed Qwap swap later shown on slide 5 illustrates this gap; do not claim root cause."
+      },
+      "layout": {
+        "composition": "Large split-screen comparison: three evidence lanes on left flowing to one disputed verdict on right.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "Browser / wallet / chain lanes with simple icons and one unresolved result. Use very little text."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete."
+      ]
+    },
+    {
+      "number": 3,
+      "title": "Agree on the test before the agent spends",
+      "role": "process",
+      "intent": "process",
+      "key_points": [
+        "Laya scores a longer question pool and reviews wording; buyers see the next ten.",
+        "Required answers stay mandatory; the buyer approves the plan before spending.",
+        "One approved plan binds payment, execution, and evidence."
+      ],
+      "local_context": {
+        "required_background": "The current approved image predates the question-review improvement. Laya's usefulness and clarity judgments are advisory; the agent rewrites flagged questions and the buyer confirms required answers. Revised slide content awaits the later batch regeneration."
+      },
+      "layout": {
+        "composition": "Already approved sample; preserve exact image.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "Approved sample graph."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete."
+      ],
+      "sample_approved": true
+    },
+    {
+      "number": 4,
+      "title": "A five-step buyer journey",
+      "role": "ux",
+      "intent": "ux",
+      "key_points": [
+        "Request",
+        "Approve",
+        "Fund",
+        "Run",
+        "Report"
+      ],
+      "local_context": {
+        "required_background": "Buyer screens are incomplete. This is a concept flow for the target human experience, not live product screenshots."
+      },
+      "layout": {
+        "composition": "Five elegant horizontal product frames with numbered stage labels and one short plain-language line each; use concept labels where real buyer UI is unfinished.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "Minimal, plausible interface thumbnails, clearly tagged 'Concept flow' on the slide, not presented as actual implemented UI."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete.",
+        "Render the label 'Concept flow' visibly."
+      ]
+    },
+    {
+      "number": 5,
+      "title": "The swap landed. The test failed.",
+      "role": "case study",
+      "intent": "case study",
+      "key_points": [
+        "0.01 QMS swap signed in browser",
+        "Receipt confirmed; 0.009915 USDC received",
+        "Explorer-tab assertion failed; cause unresolved"
+      ],
+      "local_context": {
+        "required_background": "A 2026-10-07 browser run signed a QMS testnet swap. Read-only RPC confirmed receipt in block 59097 and 0.009915 USDC delivered. Playwright failed because expected explorer tab did not open. Do not call it an app defect. Screenshot alone is not complete evidence."
+      },
+      "layout": {
+        "composition": "Evidence-first layout: large original Qwap success screenshot on left, clear two-column verdict panel on right: CHAIN CONFIRMED versus BROWSER ASSERTION FAILED; bottom caveat.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "Use supplied screenshot as real evidence, preserving its on-screen content. Add only simple editorial callouts outside screenshot."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/evidence/swap-success.png",
+          "role": "strict input asset: actual Qwap swap success screenshot",
+          "fidelity": "preserve screenshot content, numbers and UI; do not redraw or invent browser content"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete."
+      ]
+    },
+    {
+      "number": 6,
+      "title": "What Cardano contributes to the purchase",
+      "role": "Cardano value",
+      "intent": "Cardano value",
+      "key_points": [
+        "Masumi holds the QA service payment in escrow",
+        "Confirmed funding authorizes one approved run",
+        "A result hash binds delivered bytes, not QA truth"
+      ],
+      "local_context": {
+        "required_background": "Prior Cardano preprod payment reached FundsLocked, but result was not submitted. ResultSubmitted is not proof the seller collected funds. Keep unverified integration marked."
+      },
+      "layout": {
+        "composition": "One simplified left-to-right Masumi escrow graph with 6 main nodes and a small side note for refund/dispute; clear current-status badge.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "Nodes: Approved job → Fund escrow → FundsLocked → Run + record QA [manual] → Verify evidence → Submit result hash. Dashed arrow into manual run. Small note: Refund / dispute in Masumi lifecycle."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete."
+      ]
+    },
+    {
+      "number": 7,
+      "title": "A separate direct x402 route for agent buyers",
+      "role": "Cardano purchase route",
+      "intent": "Cardano purchase route",
+      "key_points": [
+        "One fixed quote for an approved job",
+        "Retry a pending settlement with the same signature",
+        "Direct transfer; no automatic escrow refund"
+      ],
+      "local_context": {
+        "required_background": "Local tests cover x402 HTTP/SDK flow with fixture payments. Live Cardano preprod settlement and automatic browser dispatch remain unverified. Direct x402 is separate from Masumi escrow."
+      },
+      "layout": {
+        "composition": "One simplified x402 graph with a single small pending loop; distinguish from slide 6 with clear direct-payment callout.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "Nodes: Approved job → Get fixed quote → Sign one payment → Settlement; Pending loops to Retry same signature; Confirmed → Await trusted run → Verified result. Use concise labels."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete."
+      ]
+    },
+    {
+      "number": 8,
+      "title": "Evidence before verdict",
+      "role": "technical credibility",
+      "intent": "technical credibility",
+      "key_points": [
+        "Verify plan, session, observations, and file hashes",
+        "Missing work blocks paid finalization",
+        "Model commentary cannot override recorded outcomes"
+      ],
+      "local_context": {
+        "required_background": "A report can contain an app FAIL and still be successful QA delivery. Missing critical work or unresolved transaction blocks paid finalization. Static report import/build is separate from payment job completion."
+      },
+      "layout": {
+        "composition": "One compact evidence flow graph across upper two-thirds; below, three deliverable cards: Inspectable report, Evidence archive, Integrity manifest.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "Nodes: Approved run → Capture observations [manual] → Bundle evidence → Verify bindings + files → Delivery complete?; Yes → Seal + deliver; No → Block finalization. Optional commentary outside path. Below graph: index.html + report-data.json; evidence.zip with screenshots, recording, RPC proof, logs; manifest.json with file sizes and SHA-256 hashes."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete."
+      ]
+    },
+    {
+      "number": 9,
+      "title": "A narrow buyer, a measurable service",
+      "role": "commercial hypothesis",
+      "intent": "commercial hypothesis",
+      "key_points": [
+        "First buyer: small Web3 team testing one wallet journey",
+        "Measure time, cost, and actionable findings",
+        "Pilot and pricing remain to validate"
+      ],
+      "local_context": {
+        "required_background": "No first customer, pilot conversion, or unit economics proven. Use 'To validate' labels; do not fabricate numbers."
+      },
+      "layout": {
+        "composition": "Editorial buyer-and-metrics layout: customer vignette left, three large metric placeholders right labeled Time / Cost / Useful findings; bottom 'Pilot hypothesis' bar.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "Simple line illustration of one developer receiving a reproducible finding, no invented KPI figures."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete.",
+        "Show 'To validate' prominently; no fabricated metrics or testimonials."
+      ]
+    },
+    {
+      "number": 10,
+      "title": "Proven today. Next: one paid QA loop.",
+      "role": "closing",
+      "intent": "closing",
+      "key_points": [
+        "Verified: planning, report core, wallet connection, browser swap",
+        "Next: bind approved scope, Cardano funding, run, and report",
+        "Pilot ask: one team, one scoped wallet journey"
+      ],
+      "local_context": {
+        "required_background": "Be precise: a previous Masumi payment locked, but no completed paid QA report. Browser swap and paid payment flow were separate rehearsals. Buyer UX incomplete."
+      },
+      "layout": {
+        "composition": "Strong closing composition: oversized headline; two columns PROVEN and NEXT; one crisp pilot ask band. Paired logos bottom right.",
+        "content_zones": "large title, main content, minimal footer with logos",
+        "spacing": "generous whitespace and aligned cards",
+        "variation_rule": "match approved sample identity but vary layout to fit this slide"
+      },
+      "visual_elements": {
+        "main_visual": "Minimal visual: four-step milestone line from approved scope to payment-linked report, with unfinished steps clearly marked."
+      },
+      "required_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/wallet-qa.png",
+          "role": "strict input asset: Wallet QA shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/wallet-qa-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "constraints": [
+        "English text only; all words must be correctly spelled and readable at projected size.",
+        "No slide number, watermark, or unrelated logo.",
+        "Include both supplied logos together at bottom right, matching the approved sample's compact forest panel.",
+        "Keep current implementation limits honest; never imply an unverified paid browser loop is complete."
+      ]
+    }
+  ]
+}

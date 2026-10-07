@@ -1,0 +1,29 @@
+FROM node:24-bookworm-slim
+
+ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
+    DISPLAY=:99 \
+    XDG_CACHE_HOME=/tmp/cache
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends xvfb zip \
+    && rm -rf /var/lib/apt/lists/* \
+    && groupadd --gid 10001 web3lane \
+    && useradd --uid 10001 --gid web3lane --create-home --shell /usr/sbin/nologin web3lane
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci \
+    && npx playwright install --with-deps chromium \
+    && chown -R web3lane:web3lane /app /ms-playwright
+
+COPY --chown=web3lane:web3lane . .
+COPY --chmod=0755 deploy/service-entrypoint.sh /usr/local/bin/service-entrypoint
+RUN mkdir -p /app/.local /app/.cache-synpress \
+    && chown -R web3lane:web3lane /app
+
+USER web3lane
+
+EXPOSE 21950
+
+ENTRYPOINT ["/usr/local/bin/service-entrypoint"]

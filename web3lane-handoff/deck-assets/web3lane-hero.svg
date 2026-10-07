@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-label="web3lane browser, approval shield, and evidence trail">
+  <defs>
+    <linearGradient id="card" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#1C2818"/><stop offset="1" stop-color="#163300"/></linearGradient>
+    <linearGradient id="cyan" x1="0" x2="1"><stop stop-color="#9FE870"/><stop offset="1" stop-color="#B8C9B4"/></linearGradient>
+    <linearGradient id="blue" x1="0" x2="1"><stop stop-color="#9FE870"/><stop offset="1" stop-color="#B8C9B4"/></linearGradient>
+    <filter id="glow" x="-70%" y="-70%" width="240%" height="240%"><feGaussianBlur stdDeviation="22" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="28" stdDeviation="24" flood-color="#0F160C" flood-opacity=".7"/></filter>
+  </defs>
+  <rect width="1600" height="1000" rx="54" fill="#163300"/>
+  <circle cx="305" cy="285" r="290" fill="#9FE870" opacity=".16"/><circle cx="1330" cy="715" r="330" fill="#B8C9B4" opacity=".16"/>
+  <path d="M0 772C250 630 455 855 705 718S1205 578 1600 748" fill="none" stroke="#2A4A18" stroke-width="2"/>
+
+  <!-- Browser: large, simple source of the run -->
+  <g filter="url(#shadow)">
+    <rect x="150" y="264" width="570" height="390" rx="38" fill="url(#card)" stroke="#B8C9B4" stroke-width="3"/>
+    <path d="M150 328h570" stroke="#B8C9B4" stroke-width="3"/>
+    <circle cx="205" cy="296" r="13" fill="#9FE870"/><circle cx="247" cy="296" r="13" fill="#9FE870"/><circle cx="289" cy="296" r="13" fill="#9FE870" opacity=".55"/>
+    <rect x="205" y="380" width="460" height="212" rx="22" fill="#1C2818"/>
+    <path d="M245 506c45-94 124-104 178-30 44-96 129-104 196 30" fill="none" stroke="url(#blue)" stroke-width="15" stroke-linecap="round"/>
+    <circle cx="550" cy="438" r="30" fill="#9FE870" filter="url(#glow)"/>
+    <path d="M250 552h192" stroke="#5C6B57" stroke-width="16" stroke-linecap="round"/>
+  </g>
+
+  <!-- The authorization gateway -->
+  <path d="M715 458H835" fill="none" stroke="#9FE870" stroke-width="6" stroke-dasharray="13 15" stroke-linecap="round"/>
+  <circle cx="776" cy="458" r="18" fill="#9FE870" filter="url(#glow)"/>
+  <g filter="url(#shadow)">
+    <path d="M1010 170l220 85v194c0 166-111 266-220 320-109-54-220-154-220-320V255z" fill="url(#card)" stroke="url(#cyan)" stroke-width="8"/>
+    <path d="M1010 254l132 51v116c0 92-58 157-132 199-74-42-132-107-132-199V305z" fill="#1C2818"/>
+    <path d="M930 453l56 56 113-128" fill="none" stroke="url(#cyan)" stroke-width="28" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)"/>
+  </g>
+
+  <!-- Evidence leaves the action as an inspectable trail -->
+  <path d="M1237 467c114 4 119 158 236 158" fill="none" stroke="#9FE870" stroke-width="7" stroke-dasharray="12 15" stroke-linecap="round"/>
+  <g filter="url(#shadow)">
+    <rect x="1250" y="600" width="222" height="210" rx="30" fill="url(#card)" stroke="#B8C9B4" stroke-width="3"/>
+    <rect x="1302" y="648" width="118" height="20" rx="10" fill="#9FE870"/>
+    <rect x="1302" y="698" width="84" height="20" rx="10" fill="#9FE870"/>
+    <rect x="1302" y="748" width="118" height="20" rx="10" fill="#E7F0E2"/>
+  </g>
+  <circle cx="1473" cy="625" r="18" fill="#9FE870" filter="url(#glow)"/>
+</svg>

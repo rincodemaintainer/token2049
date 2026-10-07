@@ -1,0 +1,281 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: web3lane Preprod runner - one persistent EC2 worker behind a private load balancer and public HTTPS API Gateway.
+Metadata:
+  AWSToolsMetrics:
+    AWSAgentToolkit: aws-cloudformation@3
+  com.aws.cloudformation.Context:
+    arch: API Gateway HTTPS -> VPC link -> internal ALB -> one EC2 runner
+    must:
+      - Run exactly one wallet worker; its job journal and claim lock live on the host.
+      - Keep wallet secrets and buyer tokens out of this template and source archive.
+    ref:
+      - at: web3lane-agent/deploy/PAID-SERVICE.md
+        has: service configuration and signing boundary
+        scope: shared
+Parameters:
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  RunnerSubnetId:
+    Type: AWS::EC2::Subnet::Id
+  LoadBalancerSubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+  AmiId:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-arm64
+  InstanceType:
+    Type: String
+    Default: t4g.large
+    AllowedValues:
+      - t4g.large
+      - m7g.large
+  WalletSecretArn:
+    Type: String
+    Default: ''
+    AllowedPattern: '^$|^arn:aws:secretsmanager:ap-southeast-1:[0-9]{12}:secret:.+$'
+    Description: Exact ARN of the operator-created QMS test wallet env secret
+  MpsEnvSecretArn:
+    Type: String
+    Default: ''
+    AllowedPattern: '^$|^arn:aws:secretsmanager:ap-southeast-1:[0-9]{12}:secret:.+$'
+    Description: Exact ARN of the operator-created Masumi runtime env secret
+Conditions:
+  HasWalletSecret: !Not [!Equals [!Ref WalletSecretArn, '']]
+  HasMpsEnvSecret: !Not [!Equals [!Ref MpsEnvSecretArn, '']]
+Resources:
+  SourceBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Stores the reviewed source archive used for host builds.
+        must:
+          - No wallet files, private configuration, or browser profiles in source archives.
+    Properties:
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      VersioningConfiguration:
+        Status: Enabled
+  BuyerTokenSecret:
+    Type: AWS::SecretsManager::Secret
+    DeletionPolicy: Retain
+    UpdateReplacePolicy: Retain
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Generates an API buyer credential server-side without placing it in stack outputs.
+        must:
+          - Never expose the token in logs, template parameters, or command output.
+    Properties:
+      GenerateSecretString:
+        SecretStringTemplate: '{"id":"buyer-1"}'
+        GenerateStringKey: token
+        PasswordLength: 48
+        ExcludePunctuation: true
+  RunnerRole:
+    Type: AWS::IAM::Role
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: Gives the host SSM access and read-only access to its source archive.
+        must:
+          - No long-lived AWS keys on the host.
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore
+      Policies:
+        - PolicyName: ReadRunnerSource
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: s3:GetObject
+                Resource: !Sub '${SourceBucket.Arn}/*'
+        - PolicyName: ReadRunnerSecrets
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action: secretsmanager:GetSecretValue
+                Resource:
+                  - !Ref BuyerTokenSecret
+                  - !If [HasWalletSecret, !Ref WalletSecretArn, !Ref 'AWS::NoValue']
+                  - !If [HasMpsEnvSecret, !Ref MpsEnvSecretArn, !Ref 'AWS::NoValue']
+  RunnerProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - !Ref RunnerRole
+  VpcLinkSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: API Gateway VPC link to internal load balancer
+      VpcId: !Ref VpcId
+  LoadBalancerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Internal load balancer accepts API Gateway VPC link only
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref VpcLinkSecurityGroup
+  RunnerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Runner accepts only the internal load balancer
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroup
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+  RunnerInstance:
+    Type: AWS::EC2::Instance
+    Metadata:
+      com.aws.cloudformation.Context:
+        why: One writer holds the durable payment journal and browser profile; SSM replaces SSH.
+        must:
+          - Never scale this instance to multiple active workers.
+          - Back up the journal before replacing the instance.
+    Properties:
+      ImageId: !Ref AmiId
+      InstanceType: !Ref InstanceType
+      IamInstanceProfile: !Ref RunnerProfile
+      MetadataOptions:
+        HttpTokens: required
+        HttpPutResponseHopLimit: 2
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 40
+            VolumeType: gp3
+            Encrypted: true
+            DeleteOnTermination: false
+      NetworkInterfaces:
+        - DeviceIndex: '0'
+          AssociatePublicIpAddress: true
+          SubnetId: !Ref RunnerSubnetId
+          GroupSet:
+            - !Ref RunnerSecurityGroup
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          set -euo pipefail
+          dnf install -y docker nginx
+          systemctl enable --now docker
+          cat >/etc/nginx/conf.d/wallet-qa.conf <<'NGINX'
+          server {
+            listen 80 default_server;
+            server_name _;
+            location / {
+              proxy_pass http://127.0.0.1:21950;
+              proxy_set_header Host $host;
+              proxy_set_header X-Forwarded-Proto https;
+              proxy_read_timeout 35s;
+            }
+          }
+          NGINX
+          rm -f /etc/nginx/conf.d/default.conf
+          systemctl enable --now nginx
+          mkdir -p /opt/wallet-qa /etc/wallet-qa/private /var/lib/wallet-qa/data
+          chmod 0700 /etc/wallet-qa /etc/wallet-qa/private /var/lib/wallet-qa/data
+          chown 10001:10001 /var/lib/wallet-qa/data
+      Tags:
+        - Key: Name
+          Value: !Sub '${AWS::StackName}-runner'
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internal
+      Type: application
+      Subnets: !Ref LoadBalancerSubnetIds
+      SecurityGroups:
+        - !Ref LoadBalancerSecurityGroup
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      VpcId: !Ref VpcId
+      Protocol: HTTP
+      Port: 80
+      TargetType: instance
+      Targets:
+        - Id: !Ref RunnerInstance
+          Port: 80
+      HealthCheckPath: /availability
+      HealthCheckIntervalSeconds: 30
+      Matcher:
+        HttpCode: '200'
+  Listener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref LoadBalancer
+      Protocol: HTTP
+      Port: 80
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+  VpcLink:
+    Type: AWS::ApiGatewayV2::VpcLink
+    Properties:
+      Name: !Sub '${AWS::StackName}-link'
+      SubnetIds: !Ref LoadBalancerSubnetIds
+      SecurityGroupIds:
+        - !Ref VpcLinkSecurityGroup
+  HttpApi:
+    Type: AWS::ApiGatewayV2::Api
+    Properties:
+      Name: !Sub '${AWS::StackName}-api'
+      ProtocolType: HTTP
+      DisableExecuteApiEndpoint: false
+  ApiIntegration:
+    Type: AWS::ApiGatewayV2::Integration
+    Properties:
+      ApiId: !Ref HttpApi
+      IntegrationType: HTTP_PROXY
+      IntegrationUri: !Ref Listener
+      IntegrationMethod: ANY
+      ConnectionType: VPC_LINK
+      ConnectionId: !Ref VpcLink
+      PayloadFormatVersion: '1.0'
+  DefaultRoute:
+    Type: AWS::ApiGatewayV2::Route
+    Properties:
+      ApiId: !Ref HttpApi
+      RouteKey: $default
+      Target: !Sub 'integrations/${ApiIntegration}'
+  ApiStage:
+    Type: AWS::ApiGatewayV2::Stage
+    Properties:
+      ApiId: !Ref HttpApi
+      StageName: $default
+      AutoDeploy: true
+Outputs:
+  ApiUrl:
+    Description: Public HTTPS API endpoint
+    Value: !Sub 'https://${HttpApi}.execute-api.${AWS::Region}.amazonaws.com'
+  InstanceId:
+    Description: SSM-managed runner instance
+    Value: !Ref RunnerInstance
+  SourceBucketName:
+    Description: Private source archive bucket
+    Value: !Ref SourceBucket
+  BuyerTokenSecretArn:
+    Description: ARN of the generated buyer API credential in Secrets Manager
+    Value: !Ref BuyerTokenSecret

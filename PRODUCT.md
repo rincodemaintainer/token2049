@@ -1,4 +1,4 @@
-# Wallet QA Agent
+# web3lane
 
 <!-- impeccable:product-schema 1 -->
 
@@ -8,7 +8,7 @@ web
 
 ## Stack
 
-The pitch deck is a standalone HTML/CSS/JavaScript artifact, as requested.
+The pitch deck is a Next.js presentation with a static export. The earlier standalone HTML deck remains for reference.
 
 ## Users
 
@@ -24,7 +24,7 @@ The buyer approves expected behavior and spending before a real browser wallet r
 
 ## Operating Context
 
-One desktop browser, wallet, deployed app, test network, and transaction journey form the MVP job. Masumi on Cardano handles service escrow; the tested app may be on another chain. The proposed first demo is a testnet token swap.
+One desktop browser, wallet, deployed app, test network, and transaction journey form the MVP job. Masumi on Cardano handles service escrow; the tested app may be on another chain. The first demo is the Qwap testnet token swap. A second planned demo covers wallet connection and stake-pool delegation in Eternl on Cardano Preprod.
 
 ## Capabilities and Constraints
 
@@ -32,11 +32,11 @@ The product plan includes a structured interview, versioned plan and quote, sign
 
 ## Brand Commitments
 
-The existing TOKEN2049 Wallet QA thumbnail uses a dark navy, electric blue, and cyan identity. Preserve a recognizable connection to it.
+Use Cyield's calm sage, forest green, and lime visual language for web3lane. Keep the web3lane name and TOKEN2049 context; do not reuse Cyield's name or mark.
 
 ## Evidence on Hand
 
-The handoff documents in `wallet-qa-handoff/`, prototype status in `wallet-qa-agent/README.md`, and the existing slide thumbnail in `assets/` are source material. Handoff JSON examples are synthetic.
+The handoff documents in `web3lane-handoff/`, prototype status in `web3lane-agent/README.md`, and the existing slide thumbnail in `assets/` are source material. Handoff JSON examples are synthetic.
 
 ## Product Principles
 

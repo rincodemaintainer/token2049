@@ -1,0 +1,12 @@
+{
+  "manifest_version": 3,
+  "name": "web3lane · Wallet lab",
+  "version": "0.1.0",
+  "description": "Connect and test Cardano Preprod wallet signatures with an agent-ready runbook and readable evidence.",
+  "minimum_chrome_version": "114",
+  "permissions": ["activeTab", "scripting", "sidePanel"],
+  "action": { "default_title": "Open web3lane wallet lab" },
+  "background": { "service_worker": "background.js" },
+  "side_panel": { "default_path": "index.html" },
+  "content_security_policy": { "extension_pages": "script-src 'self'; object-src 'none';" }
+}

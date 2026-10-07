@@ -1,0 +1,514 @@
+{
+  "run_status": "slides_recorded",
+  "deck_name": "web3lane-judges-deck",
+  "selected_backend": "built-in image tool",
+  "sample_generation_method": {
+    "backend_used": "built-in image tool",
+    "tool_name": "image_gen__imagegen",
+    "mode": "edit",
+    "prompt_source": "approved slide 3 initial generation prompt plus user-requested legend/logo edit in this chat",
+    "size": "built-in default landscape; generated sample 1672x940 (16:9)",
+    "quality": "built-in default; exact model/config not exposed",
+    "approved_sample_path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+    "input_context_preparation": "Parent viewed local logos and sample with view_image; workers use referenced_image_paths for the approved sample and strict input assets.",
+    "handoff_rule": "Use built-in image_gen__imagegen with referenced_image_paths and sample as style-only input; return a blocker if unavailable."
+  },
+  "max_concurrent_slides": 3,
+  "slides": [
+    {
+      "slide_id": "slide_01",
+      "number": 1,
+      "title": "Hire a wallet QA agent. Get evidence for every result.",
+      "job": "prompts/slide_01.json",
+      "out": "origin_image/slide_01.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "recorded",
+      "dispatch": {
+        "agent_id": "/root/slide_01",
+        "agent_nickname": "slide_01",
+        "prompt": "prompts/slide_01.json",
+        "prompt_sha256": "49e595b7b7f367305d3778d376d9c92cfd5cbdd93018712aafffdbd46431669b",
+        "dispatched_at": "2026-10-07T03:00:15Z"
+      },
+      "result": {
+        "agent_id": "/root/slide_01",
+        "backend_used": "built-in image tool",
+        "selected_source": "/Users/rinnguyen/.codex/generated_images/01a1144d-cab8-79b1-9581-818dbbac41f3/exec-6528e5ce-9618-49e5-a34b-74f760f4537b.png",
+        "selected_source_sha256": "9614e5f9afdced364eebfb843e04668c5f7d2f2144694120d4a76d17f12eabe4",
+        "final_image": "origin_image/slide_01.png",
+        "final_image_sha256": "9614e5f9afdced364eebfb843e04668c5f7d2f2144694120d4a76d17f12eabe4",
+        "expected_backend": "built-in image tool",
+        "expected_backend_labels": [
+          "built-in image tool",
+          "image_gen__imagegen"
+        ],
+        "sample_generation_method_matched": true,
+        "qa_note": "Title and both logos readable; style matches sample.",
+        "recorded_at": "2026-10-07T03:01:19Z"
+      },
+      "blocker": null
+    },
+    {
+      "slide_id": "slide_02",
+      "number": 2,
+      "title": "Wallet journeys fail between browser, wallet, and chain",
+      "job": "prompts/slide_02.json",
+      "out": "origin_image/slide_02.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "recorded",
+      "dispatch": {
+        "agent_id": "/root/slide_02",
+        "agent_nickname": "slide_02",
+        "prompt": "prompts/slide_02.json",
+        "prompt_sha256": "f8e32e84923d0abf85b2a4f713ef2557349de6f4769de28629245ac33cb62bfc",
+        "dispatched_at": "2026-10-07T03:00:15Z"
+      },
+      "result": {
+        "agent_id": "/root/slide_02",
+        "backend_used": "built-in image tool",
+        "selected_source": "/Users/rinnguyen/.codex/generated_images/01a1144d-d75e-7cf1-8c24-4e01427510a5/exec-f88b0aa4-a36c-4446-b002-dc7b558b0117.png",
+        "selected_source_sha256": "2f05471ff419f43676a94b83438ad2928d37b9da766fcdcf02eb25a821d9334e",
+        "final_image": "origin_image/slide_02.png",
+        "final_image_sha256": "2f05471ff419f43676a94b83438ad2928d37b9da766fcdcf02eb25a821d9334e",
+        "expected_backend": "built-in image tool",
+        "expected_backend_labels": [
+          "built-in image tool",
+          "image_gen__imagegen"
+        ],
+        "sample_generation_method_matched": true,
+        "qa_note": "Readable, accurate problem framing; paired logos present.",
+        "recorded_at": "2026-10-07T03:01:58Z"
+      },
+      "blocker": null
+    },
+    {
+      "slide_id": "slide_03",
+      "number": 3,
+      "title": "Agree on the test before the agent spends",
+      "job": "prompts/slide_03.json",
+      "out": "origin_image/slide_03.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "accepted",
+      "dispatch": null,
+      "result": {
+        "final_image": "origin_image/slide_03.png",
+        "accepted_sample": true
+      },
+      "blocker": null
+    },
+    {
+      "slide_id": "slide_04",
+      "number": 4,
+      "title": "A five-step buyer journey",
+      "job": "prompts/slide_04.json",
+      "out": "origin_image/slide_04.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "recorded",
+      "dispatch": {
+        "agent_id": "/root/slide_04",
+        "agent_nickname": "slide_04",
+        "prompt": "prompts/slide_04.json",
+        "prompt_sha256": "82b504e16c33ffdf26b827e3b16445057879dc8e4a0d4e72959576f2721dc97a",
+        "dispatched_at": "2026-10-07T03:00:16Z"
+      },
+      "result": {
+        "agent_id": "/root/slide_04",
+        "backend_used": "built-in image tool",
+        "selected_source": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/candidate_images/slide_04_repaired.png",
+        "selected_source_sha256": "b8d043dfeb61e9395756f79d77eed0e0d022f3bc70d3381d9edc03f450243c8e",
+        "final_image": "origin_image/slide_04.png",
+        "final_image_sha256": "b8d043dfeb61e9395756f79d77eed0e0d022f3bc70d3381d9edc03f450243c8e",
+        "expected_backend": "built-in image tool",
+        "expected_backend_labels": [
+          "built-in image tool",
+          "image_gen__imagegen"
+        ],
+        "sample_generation_method_matched": true,
+        "qa_note": "Concept flow labeled; testnet swap and separate service fee/test funds accurate.",
+        "recorded_at": "2026-10-07T03:03:13Z"
+      },
+      "blocker": null
+    },
+    {
+      "slide_id": "slide_05",
+      "number": 5,
+      "title": "The swap landed. The test failed.",
+      "job": "prompts/slide_05.json",
+      "out": "origin_image/slide_05.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/evidence/swap-success.png",
+          "role": "strict input asset: actual Qwap swap success screenshot",
+          "fidelity": "preserve screenshot content, numbers and UI; do not redraw or invent browser content"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "recorded",
+      "dispatch": {
+        "agent_id": "/root/slide_05",
+        "agent_nickname": "slide_05",
+        "prompt": "prompts/slide_05.json",
+        "prompt_sha256": "bb3674c47178f5a8c104681ee0cdd47e0ed4ef5bd20fe450c0f47e34c1b54d11",
+        "dispatched_at": "2026-10-07T03:01:25Z"
+      },
+      "result": {
+        "agent_id": "/root/slide_05",
+        "backend_used": "built-in image tool",
+        "selected_source": "/Users/rinnguyen/.codex/generated_images/01a1144e-fac8-7303-a374-bef11e1dd665/exec-ecde00ff-9b09-4e9b-ae56-c389f1b139d8.png",
+        "selected_source_sha256": "de61103dc7dba178ea58aae64c3dd6783bd41a8a8cdefc3858b5ed1a9c9cec95",
+        "final_image": "origin_image/slide_05.png",
+        "final_image_sha256": "de61103dc7dba178ea58aae64c3dd6783bd41a8a8cdefc3858b5ed1a9c9cec95",
+        "expected_backend": "built-in image tool",
+        "expected_backend_labels": [
+          "built-in image tool",
+          "image_gen__imagegen"
+        ],
+        "sample_generation_method_matched": true,
+        "qa_note": "Evidence screenshot and all key numbers legible; cause remains unresolved.",
+        "recorded_at": "2026-10-07T03:03:00Z"
+      },
+      "blocker": null
+    },
+    {
+      "slide_id": "slide_06",
+      "number": 6,
+      "title": "What Cardano contributes to the purchase",
+      "job": "prompts/slide_06.json",
+      "out": "origin_image/slide_06.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "recorded",
+      "dispatch": {
+        "agent_id": "/root/slide_06",
+        "agent_nickname": "slide_06",
+        "prompt": "prompts/slide_06.json",
+        "prompt_sha256": "001cbacfb8ccf6a014b2abd2b7a8834b36fddd5b017086fd95243e9d2cbef7f2",
+        "dispatched_at": "2026-10-07T03:02:05Z"
+      },
+      "result": {
+        "agent_id": "/root/slide_06",
+        "backend_used": "built-in image tool",
+        "selected_source": "/Users/rinnguyen/.codex/generated_images/01a1144f-9520-78b2-aa15-42070e29e963/exec-0f8e08e6-6390-4d2f-97fe-c38cb2c4e2c7.png",
+        "selected_source_sha256": "9ebb00be6a43d67525bebaf3f94889566f2659af9163f7b402ed0e2502d924d2",
+        "final_image": "origin_image/slide_06.png",
+        "final_image_sha256": "9ebb00be6a43d67525bebaf3f94889566f2659af9163f7b402ed0e2502d924d2",
+        "expected_backend": "built-in image tool",
+        "expected_backend_labels": [
+          "built-in image tool",
+          "image_gen__imagegen"
+        ],
+        "sample_generation_method_matched": true,
+        "qa_note": "Masumi graph readable; manual handoff and hash limit visible; paid-run limit explained in notes.",
+        "recorded_at": "2026-10-07T03:04:07Z"
+      },
+      "blocker": null
+    },
+    {
+      "slide_id": "slide_07",
+      "number": 7,
+      "title": "A separate direct x402 route for agent buyers",
+      "job": "prompts/slide_07.json",
+      "out": "origin_image/slide_07.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "recorded",
+      "dispatch": {
+        "agent_id": "/root/slide_07",
+        "agent_nickname": "slide_07",
+        "prompt": "prompts/slide_07.json",
+        "prompt_sha256": "fe0bf5182f95e25dcacde51104653aca38a0d2c2029e78c308e523497ddf62bc",
+        "dispatched_at": "2026-10-07T03:03:06Z"
+      },
+      "result": {
+        "agent_id": "/root/slide_07",
+        "backend_used": "built-in image tool",
+        "selected_source": "/Users/rinnguyen/.codex/generated_images/01a11450-858b-7703-8e3e-d7611aea0afd/exec-7cab8d9f-dcfe-411c-bbcd-cd6fa8334f2b.png",
+        "selected_source_sha256": "1f89c9822d614e45fc1f1eb8d12348223672d8da4a1ed0c310a5d4cb5ac9974e",
+        "final_image": "origin_image/slide_07.png",
+        "final_image_sha256": "1f89c9822d614e45fc1f1eb8d12348223672d8da4a1ed0c310a5d4cb5ac9974e",
+        "expected_backend": "built-in image tool",
+        "expected_backend_labels": [
+          "built-in image tool",
+          "image_gen__imagegen"
+        ],
+        "sample_generation_method_matched": true,
+        "qa_note": "Direct x402 and no-refund boundary explicit; same-signature retry shown; live limit visible.",
+        "recorded_at": "2026-10-07T03:04:44Z"
+      },
+      "blocker": null
+    },
+    {
+      "slide_id": "slide_08",
+      "number": 8,
+      "title": "Evidence before verdict",
+      "job": "prompts/slide_08.json",
+      "out": "origin_image/slide_08.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "recorded",
+      "dispatch": {
+        "agent_id": "/root/slide_08",
+        "agent_nickname": "slide_08",
+        "prompt": "prompts/slide_08.json",
+        "prompt_sha256": "f1ff2b2b55214eabb910bd4c8c9c886aac64be9ee6a43d9c993d4e2a1d35d389",
+        "dispatched_at": "2026-10-07T03:03:19Z"
+      },
+      "result": {
+        "agent_id": "/root/slide_08",
+        "backend_used": "built-in image tool",
+        "selected_source": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/candidate_images/slide_08.png",
+        "selected_source_sha256": "7a67165172bcc15ac78cc0bc438f664a081baa9e1667555529e6b83cf86e70af",
+        "final_image": "origin_image/slide_08.png",
+        "final_image_sha256": "d6d3d26cd538ee2b99aecce0f45d5ee0ffcbfb01d9a4930ec0b5dde5e84d7444",
+        "expected_backend": "built-in image tool",
+        "expected_backend_labels": [
+          "built-in image tool",
+          "image_gen__imagegen"
+        ],
+        "sample_generation_method_matched": true,
+        "qa_note": "Graph and Yes/No branch readable; repaired bottom row shows report, evidence ZIP, and manifest without overlap.",
+        "repair": {
+          "backend_used": "built-in image tool",
+          "selected_source": "/Users/rinnguyen/.codex/generated_images/01a11434-a4ac-7203-a2be-2a47ab10b788/exec-8b4f676b-b88a-411a-a620-122d308da6b0.png",
+          "selected_source_sha256": "d6d3d26cd538ee2b99aecce0f45d5ee0ffcbfb01d9a4930ec0b5dde5e84d7444",
+          "repaired_at": "2026-10-07T03:24:20Z",
+          "note": "User-requested bottom content change; final image edited from recorded slide with the selected backend."
+        },
+        "recorded_at": "2026-10-07T03:05:19Z"
+      },
+      "blocker": null
+    },
+    {
+      "slide_id": "slide_09",
+      "number": 9,
+      "title": "A narrow buyer, a measurable service",
+      "job": "prompts/slide_09.json",
+      "out": "origin_image/slide_09.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "recorded",
+      "dispatch": {
+        "agent_id": "/root/slide_09",
+        "agent_nickname": "slide_09",
+        "prompt": "prompts/slide_09.json",
+        "prompt_sha256": "6e03f0b8db5fead43016cc4b6e8f49dd71bae55afc6ed0d7dd76852813066718",
+        "dispatched_at": "2026-10-07T03:04:24Z"
+      },
+      "result": {
+        "agent_id": "/root/slide_09",
+        "backend_used": "built-in image tool",
+        "selected_source": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/candidate_images/slide_09_repaired.png",
+        "selected_source_sha256": "381a8f741000161816c4eae0d1de7830e95ac5f9963c11600e548938891b2ba5",
+        "final_image": "origin_image/slide_09.png",
+        "final_image_sha256": "381a8f741000161816c4eae0d1de7830e95ac5f9963c11600e548938891b2ba5",
+        "expected_backend": "built-in image tool",
+        "expected_backend_labels": [
+          "built-in image tool",
+          "image_gen__imagegen"
+        ],
+        "sample_generation_method_matched": true,
+        "qa_note": "No overlap; three metrics clearly marked To validate; logos present.",
+        "recorded_at": "2026-10-07T03:09:08Z"
+      },
+      "blocker": null
+    },
+    {
+      "slide_id": "slide_10",
+      "number": 10,
+      "title": "Proven today. Next: one paid QA loop.",
+      "job": "prompts/slide_10.json",
+      "out": "origin_image/slide_10.png",
+      "input_images": [
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/origin_image/slide_03.png",
+          "role": "approved sample slide style reference only",
+          "fidelity": "match palette, typography, card and footer treatment; do not copy sample content or exact layout"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/web3lane.png",
+          "role": "strict input asset: web3lane shield logo; bottom-right paired signature",
+          "fidelity": "preserve original shield mark and proportions; no redraw or altered glyphs"
+        },
+        {
+          "path": "/Users/rinnguyen/Projects/hackathon/token2049/web3lane-judges-deck/assets/logos/token2049-origins.png",
+          "role": "strict input asset: TOKEN2049 ORIGINS hackathon logo; bottom-right paired signature",
+          "fidelity": "preserve original white wordmark, date, and proportions; on dark forest panel for contrast"
+        }
+      ],
+      "requires_context_images": true,
+      "status": "recorded",
+      "dispatch": {
+        "agent_id": "/root/slide_10",
+        "agent_nickname": "slide_10",
+        "prompt": "prompts/slide_10.json",
+        "prompt_sha256": "0a7cd613a1402efc45a3b8335c32e7f56256c1a995d9ea29b4557fc06a877777",
+        "dispatched_at": "2026-10-07T03:05:03Z"
+      },
+      "result": {
+        "agent_id": "/root/slide_10",
+        "backend_used": "built-in image tool",
+        "selected_source": "/Users/rinnguyen/.codex/generated_images/01a11452-3c8c-7fc1-9334-6fee040da814/exec-acabe6a3-4f55-47a3-ab57-00e716860316.png",
+        "selected_source_sha256": "5ccd283532375a4a281caf53ea4292296e5c6eabee87f8a2ee8fbd0fff37cd23",
+        "final_image": "origin_image/slide_10.png",
+        "final_image_sha256": "5ccd283532375a4a281caf53ea4292296e5c6eabee87f8a2ee8fbd0fff37cd23",
+        "expected_backend": "built-in image tool",
+        "expected_backend_labels": [
+          "built-in image tool",
+          "image_gen__imagegen"
+        ],
+        "sample_generation_method_matched": true,
+        "qa_note": "Closing clearly distinguishes verified components from unfinished paid loop; logos present.",
+        "recorded_at": "2026-10-07T03:06:36Z"
+      },
+      "blocker": null
+    }
+  ],
+  "updated_at": "2026-10-07T03:09:08Z"
+}

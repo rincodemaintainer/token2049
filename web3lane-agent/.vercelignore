@@ -1,0 +1,14 @@
+node_modules
+.env*
+.local
+.private
+.cache-synpress
+test-results
+playwright-report
+*.log
+.DS_Store
+.eve
+.next
+.output
+.nitro
+dist

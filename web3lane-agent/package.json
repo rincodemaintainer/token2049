@@ -1,0 +1,54 @@
+{
+  "name": "web3lane-agent",
+  "version": "0.0.0",
+  "type": "module",
+  "imports": {
+    "#*": "./agent/*",
+    "#evals/*": "./evals/*"
+  },
+  "scripts": {
+    "build": "eve build",
+    "deploy": "eve deploy",
+    "dev": "NODE_ENV=development eve dev",
+    "eval": "eve eval",
+    "start": "eve start",
+    "api": "node --env-file-if-exists=.env --env-file-if-exists=.env.local agent-api.mjs",
+    "test": "node --experimental-strip-types --test agent/lib/**/*.test.ts paid-finalization.test.mjs",
+    "typecheck": "tsc",
+    "browser:setup": "synpress tests/wallet-setup",
+    "browser:test": "playwright test",
+    "browser:swap": "playwright test --config=playwright.swap.config.ts",
+    "browser:eternl": "playwright test --config=playwright.eternl.config.ts",
+    "browser:eternl:prepare": "node scripts/prepare-eternl-profile.mjs",
+    "wallet:preprod:status": "node --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/preprod-wallet-status.mjs",
+    "report:pack": "node scripts/build-evidence-report.mjs",
+    "report:import": "node scripts/import-evidence-report.mjs",
+    "test:reports": "node --test scripts/build-evidence-report.test.mjs scripts/evidence-bundle.test.mjs",
+    "test:service": "node --test service-auth.test.mjs service-storage.test.mjs service-runner.test.mjs agent-api.test.mjs x402-api.test.mjs x402-http.test.mjs",
+    "test:x402": "node --test x402-checkout.test.mjs x402-client.test.mjs x402-api.test.mjs x402-http.test.mjs"
+  },
+  "dependencies": {
+    "@vercel/connect": "2.2.0",
+    "@x402/cardano": "2.28.0",
+    "@x402/core": "2.28.0",
+    "@x402/fetch": "2.28.0",
+    "ai": "^7.0.105",
+    "eve": "^0.71.2",
+    "microsandbox": "^0.5.10",
+    "viem": "^2.57.3",
+    "zod": "4.5.4"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@synthetixio/synpress": "4.1.2",
+    "@types/node": "24.x",
+    "typescript": "7.0.2"
+  },
+  "overrides": {
+    "@playwright/test": "$@playwright/test",
+    "playwright-core": "1.63.0"
+  },
+  "engines": {
+    "node": "24.x"
+  }
+}

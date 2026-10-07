@@ -1,0 +1,39 @@
+services:
+  paid-browser:
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    image: web3lane-paid-browser:local
+    init: true
+    restart: unless-stopped
+    stop_grace_period: 20s
+    ports:
+      - "127.0.0.1:21950:21950"
+    env_file:
+      - ${WEB3LANE_SERVICE_ENV_FILE:?Set the absolute service environment file path}
+    environment:
+      AGENT_API_HOST: 0.0.0.0
+      AGENT_API_PORT: 21950
+      WEB3LANE_DATA_ROOT: /app/.local
+      WEB3LANE_API_CLIENTS_FILE: /app/.local/api-clients.json
+    volumes:
+      - paid-browser-data:/app/.local
+      - ${WEB3LANE_WALLET_ENV_FILE:?Set the absolute wallet environment file path}:/app/.env:ro
+      - ${WEB3LANE_PRIVATE_CONFIG_DIR:?Set the absolute private config directory}:/run/web3lane/private:ro
+      - ${WEB3LANE_METAMASK_EXTENSION_DIR:?Set the absolute MetaMask extension directory}:/app/.cache-synpress/metamask-chrome-13.13.1:ro
+    read_only: true
+    tmpfs:
+      - /tmp:mode=1777,size=1g
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:21950/availability').then(response => process.exit(response.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+volumes:
+  paid-browser-data:

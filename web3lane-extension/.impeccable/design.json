@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-07T00:00:00+08:00",
+  "title": "Design System: web3lane",
+  "extensions": {
+    "colorMeta": {
+      "forest": { "role": "primary", "displayName": "Forest", "canonical": "#163300", "tonalRamp": ["#102400", "#163300", "#214a08", "#356b1c", "#558a36", "#7faf58", "#acd58e", "#e5f1da"] },
+      "lime": { "role": "primary", "displayName": "Lime", "canonical": "#9fe870", "tonalRamp": ["#1d3510", "#31591a", "#4e842a", "#6db943", "#9fe870", "#b7ef92", "#d1f5bb", "#ebfbe1"] },
+      "sage": { "role": "neutral", "displayName": "Sage", "canonical": "#e8ebe6", "tonalRamp": ["#263025", "#465244", "#6d786b", "#969f93", "#bec5ba", "#d9ded5", "#e8ebe6", "#f8faf6"] },
+      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#f9faf7", "tonalRamp": ["#30342e", "#575c54", "#80857c", "#a7aca3", "#cdd1c9", "#e4e7e1", "#f9faf7", "#ffffff"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Page-level workspace headlines." },
+      "title": { "displayName": "Title", "purpose": "Panel and content-sheet headings." },
+      "body": { "displayName": "Body", "purpose": "Readable operational and instructional copy." },
+      "label": { "displayName": "Label", "purpose": "Controls, badges, and session metadata." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "control-transition", "value": "background-color .18s, color .18s", "purpose": "Shared button and link state transition." },
+      { "name": "loading-spin", "value": "1s linear infinite", "purpose": "Wallet request loading indicator." }
+    ],
+    "breakpoints": [
+      { "name": "wide", "value": "1500px" },
+      { "name": "compact-desktop", "value": "1150px" },
+      { "name": "tablet", "value": "900px" },
+      { "name": "mobile", "value": "700px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The single clear next action in the wallet runbook.",
+      "html": "<button class=\"ds-btn-primary\">Connect wallet <svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-primary { display:inline-flex; align-items:center; gap:10px; min-height:42px; padding:11px 15px; border:1px solid transparent; border-radius:7px; background:#9fe870; color:#163300; font:600 11px 'Plus Jakarta Sans',sans-serif; cursor:pointer; transition:background-color .18s,color .18s; } .ds-btn-primary svg { width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round; } .ds-btn-primary:hover { background:#8bdb58; } .ds-btn-primary:focus-visible { outline:3px solid #4e842a; outline-offset:4px; } .ds-btn-primary:active { background:#78c849; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "The review and approval-request control used after wallet connection.",
+      "html": "<button class=\"ds-btn-secondary\">Approve &amp; request signature</button>",
+      "css": ".ds-btn-secondary { min-height:42px; padding:11px 15px; border:1px solid #c8d1c4; border-radius:7px; background:#edf2e8; color:#21351b; font:600 11px 'Plus Jakarta Sans',sans-serif; cursor:pointer; transition:background-color .18s,color .18s; } .ds-btn-secondary:hover { background:#e1eadb; } .ds-btn-secondary:focus-visible { outline:3px solid #4e842a; outline-offset:4px; } .ds-btn-secondary:active { background:#d8e4d1; }"
+    },
+    {
+      "name": "Message Field",
+      "kind": "input",
+      "description": "Compact text field for the human-reviewed wallet test message.",
+      "html": "<textarea class=\"ds-message\" rows=\"3\">I am testing my wallet connection with web3lane.</textarea>",
+      "css": ".ds-message { width:100%; min-height:80px; padding:12px; border:1px solid #c8d1c4; border-radius:7px; background:#f0f3ed; color:#405237; font:400 11px/1.8 'Plus Jakarta Sans',sans-serif; resize:vertical; } .ds-message:hover { border-color:#aebdaa; } .ds-message:focus-visible { outline:3px solid #4e842a; outline-offset:4px; }"
+    },
+    {
+      "name": "Network Badge",
+      "kind": "chip",
+      "description": "Persistent Preprod network context in the top bar.",
+      "html": "<span class=\"ds-network\"><i></i>Cardano Preprod</span>",
+      "css": ".ds-network { display:inline-flex; align-items:center; gap:7px; padding:7px 11px; border-radius:20px; background:#dce6d6; color:#3a5930; font:600 10px 'Plus Jakarta Sans',sans-serif; } .ds-network i { width:6px; height:6px; border-radius:50%; background:#4e792e; }"
+    },
+    {
+      "name": "Runbook Panel",
+      "kind": "card",
+      "refersTo": "runbook",
+      "description": "The bordered two-step container for connection and a human-approved test signature.",
+      "html": "<section class=\"ds-runbook\"><header>Your wallet test <span>Ready when you are</span></header><div class=\"ds-step\"><b>1</b><div><strong>Connect a wallet</strong><p>Connection requests account access only.</p></div></div><div class=\"ds-step\"><b>2</b><div><strong>Try a message signature</strong><p>No transaction, fees, or funds moved.</p></div></div></section>",
+      "css": ".ds-runbook { overflow:hidden; border:1px solid #d3dbce; border-radius:14px; background:#f9faf7; color:#21351b; font-family:'Plus Jakarta Sans',sans-serif; } .ds-runbook header { display:flex; justify-content:space-between; gap:10px; padding:22px 25px; border-bottom:1px solid #e1e6dc; font-size:13px; font-weight:700; } .ds-runbook header span { color:#5c6b57; font-size:10px; font-weight:400; } .ds-step { display:flex; gap:15px; padding:27px 25px 30px; } .ds-step + .ds-step { border-top:1px solid #e1e6dc; } .ds-step b { display:grid; place-items:center; width:27px; height:27px; border:1px solid #b6c9a8; border-radius:50%; background:#eaf1e4; color:#41652c; font-size:11px; } .ds-step strong { font-size:15px; } .ds-step p { margin:9px 0 0; color:#5c6b57; font-size:11px; line-height:1.9; }"
+    },
+    {
+      "name": "Agent Status Card",
+      "kind": "custom",
+      "description": "Dark context card that explains the safe next state without competing with the runbook.",
+      "html": "<section class=\"ds-agent\"><span class=\"ds-agent-top\">Your next move <i></i></span><h2>Let’s meet<br/>your wallet.</h2><p>Start with a connection. We’ll check the network and prepare a message for you to review.</p><footer><em></em>Local workflow · no AI backend</footer></section>",
+      "css": ".ds-agent { padding:23px; border-radius:14px; background:#163300; color:#f2f5f0; font-family:'Plus Jakarta Sans',sans-serif; } .ds-agent-top { display:flex; align-items:center; gap:8px; color:#d6e6cd; font-size:11px; } .ds-agent-top i { width:5px; height:5px; margin-left:auto; border-radius:50%; background:#9fe870; } .ds-agent h2 { margin:24px 0 12px; color:#f2f5f0; font-size:27px; font-weight:500; line-height:1.23; letter-spacing:-.035em; } .ds-agent p { color:#c4d5ba; font-size:11px; line-height:1.9; } .ds-agent footer { display:flex; align-items:center; gap:7px; margin-top:24px; padding-top:14px; border-top:1px solid #3b542d; color:#c4d5ba; font-size:9px; } .ds-agent footer em { width:5px; height:5px; border-radius:50%; background:#9fe870; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The quiet wallet lab",
+    "overview": "web3lane inherits a restrained forest, sage, paper, and lime visual world. It presents sensitive wallet actions as a calm developer workspace: small labels, compact controls, generous panel breathing room, and precise status language. The interface makes the approval boundary visible through the two-step runbook, Preprod badge, disabled states, readable signing payload, and local evidence views. Staking is explicitly deferred; this surface documents connection and message-signature testing only.",
+    "keyCharacteristics": ["Fixed workspace rail, compact top bar, and paper work surface", "Dark forest agent-status card paired with restrained pale panels", "Lime reserved for the primary forward action and live status", "Human-readable state and agent-readable evidence share the same surface"],
+    "rules": [{ "name": "The Lime Boundary Rule", "body": "Use lime only for a clear next action, completion, or live state. Do not use it to decorate passive content.", "section": "colors" }],
+    "dos": ["Do preserve the explicit Cardano Preprod badge and network confirmation state.", "Do keep connection and signing as visibly separate steps.", "Do use short, direct helper text alongside controls that have wallet consequences.", "Do retain the readable signing payload before the approval request."],
+    "donts": ["Don't represent staking as available in this wallet-test surface.", "Don't expose signing as an agent-executed tool; the review button and wallet prompt remain the approval boundary.", "Don't add decorative shadows or high-saturation accents outside the existing lime action role."]
+  }
+}

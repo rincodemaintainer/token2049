@@ -1,5 +1,11 @@
 # Eve agent on AWS with Bedrock
 
+Archived experiment: production uses Vercel again as of 2026-10-07. The
+Bedrock provider and self-hosted sandbox branches were removed from the active
+runtime. Commit `22ade12` preserves the AWS implementation described below;
+restore those branches before using these container instructions. AWS resources
+were not deleted. See [the active Vercel deployment](VERCEL-AGENT.md).
+
 The conversational agent runs separately from the paid browser service. The
 existing paid runner, payment journal, wallet configuration, and API remain
 independent. Run one Eve replica while using the local Workflow world.

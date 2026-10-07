@@ -70,20 +70,20 @@ The one-off preparation and migration scripts have been removed.
 Eve selects its model at runtime in `agent/agent.ts`, with high reasoning in both modes:
 
 - **Local development:** `npm run dev` sets `NODE_ENV=development` and uses `chatgpt("gpt-5.6-luna")` with your existing ChatGPT subscription login. No Gateway key is required. If the session expires, sign in through eve's `/login`.
-- **Production and Vercel previews:** use `zai/glm-5.3-flash` through Vercel AI Gateway, restricted to DeepInfra. Any Vercel deployment uses Gateway even if `NODE_ENV` is accidentally set to `development`. Local runs without `NODE_ENV=development` also use Gateway.
+- **Production and Vercel previews:** use `openai/gpt-oss-20b` through Vercel AI Gateway. Any Vercel deployment uses Gateway even if `NODE_ENV` is accidentally set to `development`. Local runs without `NODE_ENV=development` also use Gateway.
 
 The resolver runs at `step.started` because eve requires that scope when returning a live subscription model. It reads environment settings at runtime rather than baking local authentication into a deployment.
 
-Two model choices, checked against the Gateway catalog on 2026-10-07:
+Production uses GPT-OSS 20B at $0.03 input / $0.14 output per million tokens.
+Live text and tool-call checks passed on this Vercel free-tier account. It accepts
+text, not screenshot input. Gemini 2.5 Flash-Lite is a vision-capable alternative
+whose text smoke check also passed. The previous DeepInfra GLM configuration
+was rejected because this account's free tier cannot access it.
 
-| Use | Gateway model | Starting input / output price per 1M tokens |
-| --- | --- | --- |
-| Production budget default, DeepInfra promotion | [`zai/glm-5.3-flash`](https://vercel.com/ai-gateway/models/glm-5.3-flash) | ~$0.08 / $0.25 |
-| More capable demo candidate | [`openai/gpt-6-sol`](https://vercel.com/ai-gateway/models/gpt-6-sol) | $2 / $10 |
-
-Both list image input, reasoning, tool use, and structured outputs. GLM Flash has roughly 1M context. DeepInfra is pinned to retain the quoted provider pricing; if unavailable, calls fail rather than falling back to a different provider. Promotions may end, so recheck before deployment. These are catalog checks, not completed QA evals or live authentication checks.
-
-For the Sol demo, change only the production return value in `agent/agent.ts` to `{ model: "openai/gpt-6-sol" }`, removing the DeepInfra-only options, then redeploy. Preserve the development branch. Both hosted models use the same `AI_GATEWAY_API_KEY`; run the model evals before the demo.
+See [Vercel hosting and model budget](deploy/VERCEL-AGENT.md) for the tested
+alternatives, free-model limitations, and deployment settings. Model credits
+are separate from hosting, Workflow, and Sandbox usage. The AWS experiment is
+preserved in commit `22ade12`; Bedrock is no longer selected by this runtime.
 
 For local Gateway testing, create an **AI Gateway API key** from your Vercel team's AI Gateway page and add it to the ignored `web3lane-agent/.env.local`. A general Vercel deployment/access token is not a Gateway key. See [Gateway authentication](https://vercel.com/docs/ai-gateway/authentication-and-byok).
 

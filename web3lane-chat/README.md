@@ -63,3 +63,9 @@ npm run build
 ```
 
 Proxy tests cover routes, methods, auth forwarding, streaming, upstream failures and origin boundaries. Live conversation/paid execution requires configured deployment credentials and the prerequisites above.
+
+## Public pages
+
+The homepage is the landing page; the existing workspace is at `/chat`. Legal notices live at `/terms` and `/privacy`. The existing hackathon thumbnail is optimized as `public/thumbnail.webp` and used for Open Graph and Twitter previews. `/robots.txt` and `/sitemap.xml` cover the public pages. `SITE_URL` optionally overrides the default canonical origin, `https://web3lane.vercel.app`.
+
+The policy notices describe the prototype and explicitly identify unconfirmed operator/contact, provider and retention details. Supply those details before treating these as finalized production policies. Do not add shared agent credentials to the public deployment without protecting the chat and API as described above.

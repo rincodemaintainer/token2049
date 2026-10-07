@@ -9,3 +9,7 @@ Desktop: quiet journey rail; compact agent header and connection check; centered
 shadcn/ui Button and Textarea sources live in `components/ui`, with Tailwind v4 CSS-variable tokens and `components.json`. Markdown never enables raw HTML. Tool results collapse into inspectable rows; actual Eve input requests retain distinct review/answer controls. Connection, resuming, working, waiting, cancellation and error states remain textual.
 
 The layout favors the existing minimal chat request over a new visual identity. No fabricated messages, stages, payment state or case results populate the empty view.
+
+## Public landing and legal pages
+
+The landing at `/` uses the same paper, forest and lime tokens and self-hosted type. Its purpose is to explain wallet QA planning and lead to `/chat`. A compact desktop split pairs concise copy with the existing hackathon thumbnail; mobile stacks them. An unboxed three-step workflow and explicit current-runner scope follow. Header and footer link chat and legal routes. Legal pages use a narrow reading measure with dated, descriptive sections. The thumbnail is also the social preview; canonical URLs default to https://web3lane.vercel.app.

@@ -9,7 +9,7 @@ export const metadata = pageMetadata("web3lane · Wallet QA, with the proof", "/
 export default function Page() {
   return <SiteShell><main>
     <section className="landing-hero">
-      <div><h1>Wallet QA,<br />with the proof.</h1><p>Turn your dApp journey into a clear test plan. Work with an AI agent to define expectations, review actions, and inspect the evidence.</p><div className="landing-actions"><Link className="site-button" href="/chat">Plan a wallet test <span aria-hidden="true">↗</span></Link><Link className="site-text-link" href="/testing-guide">See the testing guide</Link></div></div>
+      <div><h1>Wallet QA,<br />with the proof.</h1><p>Turn your dApp journey into a clear test plan. Work with an AI agent to define expectations, review actions, and inspect the evidence.</p><div className="landing-actions"><Link className="site-button" href="/chat">Plan a wallet test <ArrowUpRight size={16} aria-hidden="true" /></Link><Link className="site-text-link" href="/testing-guide">See the testing guide</Link></div></div>
       <figure className="landing-image"><Image src="/wallet-qa-hero.png" alt="Wallet journey connected to an evidence checklist with verification marks." width={1536} height={1024} priority sizes="(max-width: 800px) 100vw, 55vw" /><figcaption>Built at TOKEN2049 Origins Hackathon · 2026</figcaption></figure>
     </section>
     <section className="landing-workflow" aria-labelledby="workflow-title"><h2 id="workflow-title">From intent to evidence.</h2><ol>

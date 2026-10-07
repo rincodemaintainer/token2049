@@ -149,7 +149,17 @@ footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 1
 .legal-page h1 { font-size: clamp(32px, 5vw, 46px); font-weight: 600; line-height: 1.15; letter-spacing: -.035em; margin-bottom: 16px; }
 .legal-date { color: var(--muted-foreground); font-size: 12px; margin-bottom: 30px; }
 .legal-page h2 { font-size: 20px; font-weight: 600; margin: 32px 0 10px; }
+.landing-report { display: grid; grid-template-columns: .75fr 1.25fr; gap: 56px; align-items: start; border-top: 1px solid var(--border); padding: 64px 0 72px; }
+.landing-report h2 { margin: 0 0 22px; color: #163300; font-size: clamp(28px, 3vw, 38px); line-height: 1.2; font-weight: 600; letter-spacing: -.03em; text-wrap: balance; }
+.landing-report-copy p { color: var(--muted-foreground); font-size: 15px; line-height: 1.85; max-width: 45ch; }
+.landing-report-copy .landing-report-note { font-size: 12px; margin: 24px 0; }
+.landing-report-image { min-width: 0; margin: 0; }
+.landing-report-scroll { max-height: 580px; overflow-y: auto; border: 1px solid var(--border); border-radius: 14px; scrollbar-color: #5c6b57 #e8ebe6; }
+.landing-report-scroll img { display: block; width: 100%; height: auto; }
+.landing-report-image figcaption { margin-top: 12px; color: var(--muted-foreground); font-size: 11px; line-height: 1.6; }
 @media (max-width: 800px) {
+  .landing-report { grid-template-columns: 1fr; gap: 28px; padding: 42px 0 48px; }
+  .landing-report-scroll { max-height: 480px; }
   .site-shell { padding: 0 22px; }
   .site-header { padding: 23px 0; }
   .landing-hero { grid-template-columns: 1fr; gap: 36px; padding: 48px 0; }

@@ -1,5 +1,20 @@
-:root { color-scheme: light; }
+@font-face { font-family: "Plus Jakarta Sans"; src: url("/fonts/plus-jakarta-sans.woff2") format("woff2"); font-weight: 200 800; font-style: normal; font-display: swap; }
+:root { color-scheme: light; --paper: #f9faf7; --sage: #e8ebe6; --forest: #163300; --ink: #21351b; --lime: #9fe870; --line: #d2dacd; --muted: #5c6b57; }
 * { box-sizing: border-box; }
-html, body { margin: 0; min-height: 100%; }
-body { background: #e8ebe6; color: #21351b; font-family: Arial, Helvetica, sans-serif; }
-a { color: inherit; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Plus Jakarta Sans", sans-serif; font-size: 14px; line-height: 1.6; }
+a { color: inherit; text-underline-offset: 4px; }
+a:hover { color: #386024; }
+a:focus-visible, summary:focus-visible, video:focus-visible { outline: 3px solid #527044; outline-offset: 5px; }
+.site-header, .site-footer { width: min(100% - 80px, 1200px); margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.site-header { min-height: 100px; border-bottom: 1px solid var(--line); }
+.brand { display: inline-flex; align-items: center; gap: 11px; color: var(--forest); text-decoration: none; font-size: 25px; font-weight: 750; letter-spacing: -.035em; }
+.site-header nav { display: flex; gap: 32px; }
+.site-header nav a { font-size: 13px; font-weight: 600; text-decoration: none; padding: 10px 0; }
+.header-label { font-size: 12px; color: var(--muted); }
+.site-footer { border-top: 1px solid var(--line); padding: 28px 0 40px; font-size: 12px; color: var(--muted); }
+.site-footer .brand { font-size: 18px; }
+.skip-link { position: absolute; top: -80px; left: 20px; background: var(--forest); color: var(--paper); padding: 10px 20px; z-index: 5; }
+.skip-link:focus { top: 12px; }
+@media (max-width: 720px) { .site-header, .site-footer { width: calc(100% - 36px); } .site-header { flex-wrap: wrap; gap: 8px; padding: 18px 0; } .brand { font-size: 22px; } .site-header nav { order: 3; width: 100%; gap: 24px; } .site-footer { flex-wrap: wrap; gap: 14px; } }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }

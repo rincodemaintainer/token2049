@@ -22,4 +22,4 @@ Before `npm run build`, copy each bundle to `public/evidence/<slug>/` with:
 }
 ```
 
-The importing process verifies bundle bytes before copying into this directory. The site performs no runtime fetch; pages are generated from local files during `npm run build`. Reports render at `/reports/<slug>/`.
+The importing process verifies bundle bytes before copying into this directory. The site performs no runtime fetch; pages are generated from local files during `npm run build`. All imported reports render directly on the single page at `/`.

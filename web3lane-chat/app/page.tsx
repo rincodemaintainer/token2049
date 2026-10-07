@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { pageMetadata } from "@/lib/site";
 
@@ -16,5 +17,9 @@ export default function Page() {
       <li><h3>Review the plan</h3><p>Clarify test cases, permissions, and limits before approving actions.</p></li>
       <li><h3>Inspect the proof</h3><p>Review tool output and available run evidence. Keep missing proof visible.</p></li>
     </ol><p className="landing-scope">Current browser journey: Qwap/QMS. Live execution needs a configured runner; payments and settlement use a separate service.</p></section>
+    <section className="landing-report" aria-labelledby="report-title">
+      <div className="landing-report-copy"><h2 id="report-title">See what the evidence looks like.</h2><p>A real Qwap wallet journey, captured in one report. Inspect the verdict, browser checks, screenshots, and transaction evidence together.</p><p className="landing-report-note">This sample confirms chain settlement and records a failed browser check. The report keeps both outcomes visible.</p><a className="site-text-link" href="/report-preview.png" target="_blank" rel="noopener noreferrer">Open full report image <ArrowUpRight size={16} aria-hidden="true" /></a></div>
+      <figure className="landing-report-image"><div className="landing-report-scroll" tabIndex={0} role="region" aria-label="Full report screenshot; scroll to inspect"><Image src="/report-preview.webp" alt="Full Web3lane Qwap evidence report showing an inconclusive verdict, confirmed chain settlement, browser checks, stage screenshots, recordings, and artifact inventory." width={1440} height={6329} sizes="(max-width: 800px) 100vw, 60vw" /></div><figcaption>Full-page capture · Qwap swap evidence · Scroll to inspect</figcaption></figure>
+    </section>
   </main></SiteShell>;
 }

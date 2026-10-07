@@ -134,7 +134,7 @@ footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 1
 .site-button { display: inline-flex; align-items: center; justify-content: space-between; gap: 28px; background: var(--primary); color: var(--primary-foreground); border-radius: 7px; padding: 16px 20px; font-size: 14px; font-weight: 650; text-decoration: none; }
 .site-button:hover { background: #8bd65c; }
 .landing-image { margin: 0; }
-.landing-image img { width: 100%; height: auto; border-radius: 12px; }
+.landing-image img { display: block; width: 100%; height: auto; }
 .landing-image figcaption { font-size: 11px; line-height: 1.6; color: var(--muted-foreground); margin-top: 12px; }
 .landing-workflow { border-top: 1px solid var(--border); padding: 38px 0 48px; }
 .landing-workflow h2 { font-size: 26px; font-weight: 550; letter-spacing: -.025em; margin: 0 0 28px; }
